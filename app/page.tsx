@@ -22,6 +22,7 @@ export const metadata: Metadata = {
 };
 
 import Hero from '@/components/Hero';
+import AboutSection from '@/components/AboutSection';
 
 export default async function Home() {
   const products = await getProducts() as any[];
@@ -29,6 +30,7 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-white">
       <Hero />
+      <AboutSection />
 
       <main className="max-w-7xl mx-auto px-8 pb-20 flex flex-col gap-12">
         <div className="text-center space-y-4">
