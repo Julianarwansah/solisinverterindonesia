@@ -16,6 +16,18 @@ async function getProducts() {
   }
 }
 
+async function getCategories() {
+  try {
+    const categories = await directus.request(readItems('product_categories', {
+      fields: ['*'] as any,
+    }));
+    return categories;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return [];
+  }
+}
+
 export const metadata: Metadata = {
   title: 'Katalog Produk Solis Inverter',
   description: 'Temukan berbagai tipe inverter Solis terbaik untuk kebutuhan solar panel Anda.',
@@ -23,14 +35,19 @@ export const metadata: Metadata = {
 
 import Hero from '@/components/Hero';
 import AboutSection from '@/components/AboutSection';
+import CategorySection from '@/components/CategorySection';
 
 export default async function Home() {
-  const products = await getProducts() as any[];
+  const [products, categories] = await Promise.all([
+    getProducts(),
+    getCategories()
+  ]) as [any[], any[]];
 
   return (
     <div className="min-h-screen bg-white">
       <Hero />
       <AboutSection />
+      <CategorySection categories={categories} />
 
       <main className="max-w-7xl mx-auto px-8 pb-20 flex flex-col gap-12">
         <div className="text-center space-y-4">

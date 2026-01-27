@@ -11,8 +11,6 @@
   },
   "dependencies": {
     "@directus/sdk": "^21.0.0",
-    "directus": "^11.14.1",
-    "mysql2": "^3.16.2",
     "next": "16.1.5",
     "react": "19.2.3",
     "react-dom": "19.2.3"
