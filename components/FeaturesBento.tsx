@@ -14,7 +14,7 @@ const features = [
             </svg>
         ),
         colSpan: 'lg:col-span-2',
-        rowSpan: 'lg:row-span-2',
+        rowSpan: 'lg:row-span-1',
         bgClasses: 'bg-gradient-to-br from-orange-50 to-orange-100/50',
         border: 'border-orange-100',
         iconBg: 'bg-orange-600 text-white',
@@ -46,7 +46,7 @@ const features = [
             </svg>
         ),
         colSpan: 'lg:col-span-1',
-        rowSpan: 'lg:row-span-2',
+        rowSpan: 'lg:row-span-1',
         bgClasses: 'bg-white',
         border: 'border-slate-100',
         iconBg: 'bg-emerald-50 text-emerald-600',
@@ -108,7 +108,7 @@ export default function FeaturesBento() {
                 </div>
 
                 {/* Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[250px] lg:auto-rows-[300px]">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[200px] lg:auto-rows-[220px]">
                     {features.map((feature, index) => (
                         <div
                             key={index}
@@ -137,20 +137,23 @@ export default function FeaturesBento() {
 
                             {/* Content */}
                             <div className="relative z-10 h-full flex flex-col justify-between">
-                                <div>
-                                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500 shadow-sm ${feature.iconBg}`}>
+                                <div className="flex items-start justify-between mb-4">
+                                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500 shadow-sm ${feature.iconBg}`}>
                                         {feature.icon}
                                     </div>
-                                    <h3 className="text-2xl font-bold text-slate-900 mb-2 group-hover:text-orange-600 transition-colors">
-                                        {feature.title}
-                                    </h3>
-                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
                                         {feature.subtitle}
                                     </p>
                                 </div>
-                                <p className="text-slate-600 leading-relaxed font-medium">
-                                    {feature.description}
-                                </p>
+
+                                <div>
+                                    <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-orange-600 transition-colors">
+                                        {feature.title}
+                                    </h3>
+                                    <p className="text-sm text-slate-600 leading-relaxed font-medium">
+                                        {feature.description}
+                                    </p>
+                                </div>
                             </div>
 
                             {/* Hover Border Glow (Pseudo-like) */}
