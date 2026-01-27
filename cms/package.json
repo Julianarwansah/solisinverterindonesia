@@ -1,0 +1,12 @@
+{
+    "name": "cms",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "start": "npx directus start"
+    },
+    "dependencies": {
+        "directus": "^11.14.1",
+        "mysql2": "^3.16.2"
+    }
+}
