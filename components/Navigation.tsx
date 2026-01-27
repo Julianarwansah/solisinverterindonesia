@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 
 export default function Navigation() {
@@ -20,10 +21,13 @@ export default function Navigation() {
                 <nav className="max-w-7xl mx-auto px-8 py-4 bg-white/90 backdrop-blur-xl border border-gray-200 rounded-full shadow-xl flex items-center justify-between">
                     {/* Logo - Left */}
                     <Link href="/" className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-inner">
-                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
+                        <div className="relative w-10 h-10 flex items-center justify-center">
+                            <Image
+                                src="/images/solisindonesialogo.png"
+                                alt="Solis Logo"
+                                fill
+                                className="object-contain"
+                            />
                         </div>
                         <span className="text-lg font-bold text-gray-900 tracking-tight">Solis Indonesia</span>
                     </Link>
@@ -69,10 +73,13 @@ export default function Navigation() {
             <nav className="md:hidden flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200 sticky top-0 z-50">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2">
-                    <div className="w-9 h-9 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center">
-                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
+                    <div className="relative w-9 h-9 flex items-center justify-center">
+                        <Image
+                            src="/images/solisindonesialogo.png"
+                            alt="Solis Logo"
+                            fill
+                            className="object-contain"
+                        />
                     </div>
                     <span className="text-lg font-bold text-gray-900">Solis Indonesia</span>
                 </Link>
@@ -109,10 +116,13 @@ export default function Navigation() {
                         {/* Header */}
                         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                             <Link href="/" className="flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
-                                <div className="w-9 h-9 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center">
-                                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                    </svg>
+                                <div className="relative w-9 h-9 flex items-center justify-center">
+                                    <Image
+                                        src="/images/solisindonesialogo.png"
+                                        alt="Solis Logo"
+                                        fill
+                                        className="object-contain"
+                                    />
                                 </div>
                                 <span className="text-lg font-bold text-gray-900">Solis Indonesia</span>
                             </Link>
