@@ -76,7 +76,7 @@ export default function CategorySection({ categories }: CategorySectionProps) {
 
     return (
         <section ref={sectionRef} className="relative py-24 lg:py-32 bg-white overflow-hidden">
-            <div className="max-w-7xl mx-auto px-6 md:px-8 relative">
+            <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative">
 
                 {/* Header Row */}
                 <div className={`flex flex-col md:flex-row justify-between items-end mb-16 gap-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
@@ -98,22 +98,35 @@ export default function CategorySection({ categories }: CategorySectionProps) {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
 
                     {/* Left: Interactive Image */}
-                    <div className={`lg:col-span-7 relative aspect-[16/10] rounded-[40px] overflow-hidden shadow-2xl group transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                    <Link
+                        href={`/products/category/${activeCategory.slug}`}
+                        className={`lg:col-span-7 relative aspect-[16/10] rounded-[40px] overflow-hidden shadow-2xl group transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+                    >
                         <Image
                             src={activeCategory.image || "/images/about_main.png"}
                             alt={activeCategory.name}
                             fill
                             className="object-cover transition-transform duration-[2000ms] group-hover:scale-105"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent" />
-                    </div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent group-hover:from-black/40 transition-all" />
+
+                        {/* Interactive Hint */}
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="bg-white/20 backdrop-blur-md px-6 py-3 rounded-full border border-white/30 text-white font-bold text-sm">
+                                Jelajahi Kategori →
+                            </div>
+                        </div>
+                    </Link>
 
                     {/* Right: Category Details & Navigation */}
                     <div className={`lg:col-span-5 space-y-10 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
                         <div className="space-y-6">
-                            <h3 className="text-3xl md:text-4xl font-black text-orange-500 transition-all duration-500">
-                                {activeCategory.name}
-                            </h3>
+                            <Link href={`/products/category/${activeCategory.slug}`} className="inline-block group/title">
+                                <h3 className="text-3xl md:text-4xl font-black text-orange-500 group-hover/title:text-orange-600 transition-all duration-500">
+                                    {activeCategory.name}
+                                </h3>
+                                <div className="h-1 w-0 group-hover/title:w-full bg-orange-500 transition-all duration-500 rounded-full mt-1" />
+                            </Link>
                             <p className="text-gray-500 text-lg leading-relaxed font-medium">
                                 {activeCategory.description || "Temukan solusi energi surya terbaik dengan teknologi inverter canggih untuk efisiensi sistem PLTS Anda."}
                             </p>

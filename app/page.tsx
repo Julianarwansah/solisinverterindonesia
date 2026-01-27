@@ -36,6 +36,7 @@ export const metadata: Metadata = {
 import Hero from '@/components/Hero';
 import AboutSection from '@/components/AboutSection';
 import CategorySection from '@/components/CategorySection';
+import FeaturesBento from '@/components/FeaturesBento';
 
 export default async function Home() {
   const [products, categories] = await Promise.all([
@@ -48,8 +49,9 @@ export default async function Home() {
       <Hero />
       <AboutSection />
       <CategorySection categories={categories} />
+      <FeaturesBento />
 
-      <main className="max-w-7xl mx-auto px-8 pb-20 flex flex-col gap-12">
+      <main className="max-w-[1440px] mx-auto px-6 md:px-12 pb-20 flex flex-col gap-12">
         <div className="text-center space-y-4">
           <h2 className="text-4xl md:text-5xl font-black text-orange-900 tracking-tight">Katalog Produk Terpopuler</h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg underline decoration-orange-500 decoration-2 underline-offset-4">Premium Inverter Technology for Solar Solutions</p>
