@@ -41,10 +41,6 @@ export const metadata: Metadata = {
   },
 };
 
-import Navigation from '@/components/Navigation';
-import Footer from '@/components/Footer';
-import FloatingWhatsApp from '@/components/FloatingWhatsApp';
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -55,10 +51,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navigation />
         {children}
-        <Footer />
-        <FloatingWhatsApp />
       </body>
     </html>
   );
