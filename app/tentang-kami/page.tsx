@@ -9,14 +9,11 @@ export const metadata: Metadata = {
 export default function AboutPage() {
     return (
         <main className="min-h-screen bg-white relative">
-            {/* Unified Background for Nav and Hero */}
-            <div className="absolute top-0 left-0 right-0 h-[600px] bg-orange-50/50 -z-0" />
-
             {/* Page Hero Section */}
-            <section className="relative pt-12 pb-20 overflow-hidden z-10">
+            <section className="relative pt-12 pb-20 overflow-hidden z-10 bg-orange-50/50">
                 {/* Background Decor */}
-                <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-orange-200/10 rounded-full blur-[120px] animate-pulse" />
-                <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-orange-100/20 rounded-full blur-[100px]" />
+                <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-orange-200/5 rounded-full blur-[120px] animate-pulse" />
+                <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-orange-100/10 rounded-full blur-[100px]" />
 
                 {/* Decorative plus signs */}
                 <div className="absolute top-20 left-[10%] text-orange-200 opacity-40 select-none">
@@ -49,21 +46,23 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="max-w-4xl mx-auto px-8 py-20 relative z-10 bg-white">
-                <div className="prose prose-lg prose-orange max-w-none">
-                    <p className="text-gray-600 leading-relaxed text-xl">
-                        Kami adalah distributor resmi Solis Inverter di Indonesia, menghadirkan teknologi inverter
-                        tercanggih untuk kebutuhan panel surya Anda.
-                    </p>
-                    <p className="text-gray-600 leading-relaxed mt-4">
-                        Dengan pengalaman bertahun-tahun di industri energi terbarukan, kami berkomitmen untuk
-                        memberikan solusi terbaik bagi kebutuhan energi masa depan Indonesia.
-                    </p>
-                    <p className="text-gray-600 leading-relaxed mt-4">
-                        Solis Inverter dikenal secara global sebagai salah satu produsen string inverter terbesar di dunia. Produk kami telah teruji di berbagai kondisi ekstrem dan memberikan performa yang stabil serta efisiensi tinggi.
-                    </p>
-                </div>
-            </section>
+            <div className="relative z-10 bg-white w-full">
+                <section className="max-w-4xl mx-auto px-8 py-20">
+                    <div className="prose prose-lg prose-orange max-w-none">
+                        <p className="text-gray-600 leading-relaxed text-xl">
+                            Kami adalah distributor resmi Solis Inverter di Indonesia, menghadirkan teknologi inverter
+                            tercanggih untuk kebutuhan panel surya Anda.
+                        </p>
+                        <p className="text-gray-600 leading-relaxed mt-4">
+                            Dengan pengalaman bertahun-tahun di industri energi terbarukan, kami berkomitmen untuk
+                            memberikan solusi terbaik bagi kebutuhan energi masa depan Indonesia.
+                        </p>
+                        <p className="text-gray-600 leading-relaxed mt-4">
+                            Solis Inverter dikenal secara global sebagai salah satu produsen string inverter terbesar di dunia. Produk kami telah teruji di berbagai kondisi ekstrem dan memberikan performa yang stabil serta efisiensi tinggi.
+                        </p>
+                    </div>
+                </section>
+            </div>
         </main>
     );
 }
