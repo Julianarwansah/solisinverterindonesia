@@ -130,9 +130,6 @@ export default function Hero() {
           animation: float 6s ease-in-out infinite;
           animation-delay: 2s;
         }
-        :global(body) {
-          background-color: white !important;
-        }
       `}</style>
     </section>
   );

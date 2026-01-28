@@ -15,8 +15,52 @@ async function getCategories(): Promise<any[]> {
 }
 
 export const metadata: Metadata = {
-  title: 'Katalog Produk Solis Inverter',
-  description: 'Temukan berbagai tipe inverter Solis terbaik untuk kebutuhan solar panel Anda.',
+  title: 'Distributor Resmi Solis Inverter Indonesia',
+  description: 'Solis Inverter Indonesia: Distributor resmi penyedia inverter surya on-grid, off-grid, dan hybrid. Garansi resmi, layanan purna jual terpercaya, dan teknisi bersertifikat.',
+  alternates: {
+    canonical: 'https://solisinverterindonesia.com',
+  }
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://solisinverterindonesia.com/#organization',
+      name: 'Solis Inverter Indonesia',
+      url: 'https://solisinverterindonesia.com',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://solisinverterindonesia.com/logo.png', // Fallback or actual logo URL
+        width: 112,
+        height: 112,
+      },
+      contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: '+62-812-5888-5595',
+        contactType: 'customer service',
+        areaServed: 'ID',
+        availableLanguage: ['en', 'id'],
+      },
+      sameAs: [
+        'https://www.facebook.com/solisinverterindonesia',
+        'https://www.instagram.com/solisinverterindonesia',
+        // Add other social links if available
+      ],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': 'https://solisinverterindonesia.com/#website',
+      url: 'https://solisinverterindonesia.com',
+      name: 'Solis Inverter Indonesia',
+      description: 'Distributor Resmi & Pusat Layanan Solis Inverter di Indonesia',
+      publisher: {
+        '@id': 'https://solisinverterindonesia.com/#organization',
+      },
+      inLanguage: 'id-ID',
+    },
+  ],
 };
 
 import Hero from '@/components/Hero';
@@ -31,6 +75,10 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Hero />
       <AboutSection />
       <CategorySection categories={categories} />
