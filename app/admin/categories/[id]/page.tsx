@@ -30,7 +30,7 @@ export default async function EditCategoryPage({ params }: any) {
                 <p className="mt-4 text-xl font-medium text-gray-400 max-w-2xl">Perbarui informasi untuk kategori <span className="text-orange-600 font-black">{category.name}</span>.</p>
             </div>
 
-            <CategoryForm initialData={category} />
+            <CategoryForm initialData={category as any} />
         </div>
     );
 }

@@ -29,7 +29,7 @@ export default function Sidebar() {
                         />
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-2xl font-[1000] text-gray-950 tracking-tighter leading-none mb-1">Arceus</span>
+                        <span className="text-2xl font-[1000] text-gray-950 tracking-tighter leading-none mb-1">Solis</span>
                         <span className="text-[10px] font-black text-orange-500 uppercase tracking-[0.3em]">Management</span>
                     </div>
                 </Link>

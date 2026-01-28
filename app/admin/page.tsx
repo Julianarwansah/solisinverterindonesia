@@ -29,7 +29,7 @@ export default async function AdminDashboard() {
                 </div>
 
                 <div className="relative z-10 max-w-2xl">
-                    <h2 className="text-orange-500 text-[10px] font-black uppercase tracking-[0.4em] mb-6">Arceus Intelligent Core</h2>
+                    <h2 className="text-orange-500 text-[10px] font-black uppercase tracking-[0.4em] mb-6">Solis Management System</h2>
                     <h1 className="text-6xl font-[1000] tracking-tighter leading-tight mb-8">
                         Selamat Datang Kembali, <span className="text-orange-500">Admin.</span>
                     </h1>
