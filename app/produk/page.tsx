@@ -46,11 +46,11 @@ export default async function ProductsPage() {
     ];
 
     return (
-        <main className="bg-white min-h-screen pt-24">
+        <main className="bg-white min-h-screen pt-12">
             {/* Breadcrumbs & Simple Header */}
             <div className="bg-white border-b border-gray-200">
-                <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-8">
-                    <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12 pt-4 pb-6">
+                    <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
                         <Link href="/" className="hover:text-orange-600 transition-colors">Beranda</Link>
                         <span>/</span>
                         <span className="text-gray-900 font-bold">Produk</span>
@@ -74,7 +74,7 @@ export default async function ProductsPage() {
                 </div>
             </div>
 
-            <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
+            <div className="max-w-[1440px] mx-auto px-6 md:px-12 pt-6 pb-12">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
                     {/* Sidebar - Desktop */}
