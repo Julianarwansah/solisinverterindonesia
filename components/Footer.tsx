@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
     return (
@@ -8,11 +9,14 @@ export default function Footer() {
 
                     {/* Brand */}
                     <div className="space-y-6">
-                        <Link href="/" className="flex items-center gap-2">
-                            <div className="w-10 h-10 bg-orange-600 rounded-xl flex items-center justify-center text-white">
-                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2L2 7l10 5 10-5-10-5zm0 9l2.5-1.25L12 8.5l-2.5 1.25L12 11zm0 2.5l-5-2.5-5 2.5 10 5 10-5-5-2.5-5 2.5z" />
-                                </svg>
+                        <Link href="/" className="flex items-center gap-3">
+                            <div className="relative w-12 h-12">
+                                <Image
+                                    src="/images/solisindonesialogo.png"
+                                    alt="Solis Indonesia Logo"
+                                    fill
+                                    className="object-contain"
+                                />
                             </div>
                             <span className="text-xl font-bold text-white tracking-tight">Solis Indonesia</span>
                         </Link>
