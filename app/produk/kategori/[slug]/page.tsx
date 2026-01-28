@@ -43,23 +43,48 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     const products = await getProductsByCategory(category.id);
 
     return (
-        <div className="min-h-screen bg-white">
-            {/* Header Section */}
-            <div className="bg-white py-20 border-b border-gray-100">
-                <div className="max-w-7xl mx-auto px-8">
-                    <Link href="/" className="text-orange-600 font-bold mb-8 inline-block hover:translate-x-[-4px] transition-transform">
-                        ← Kembali ke Beranda
-                    </Link>
-                    <h1 className="text-5xl md:text-6xl font-black text-gray-900 mb-6 tracking-tight">
-                        {category.name}
-                    </h1>
-                    <p className="text-gray-500 text-xl max-w-3xl leading-relaxed">
-                        {category.description || `Menampilkan koleksi produk terbaik kami dalam kategori ${category.name}.`}
-                    </p>
-                </div>
-            </div>
+        <div className="min-h-screen bg-white relative">
+            {/* Unified Background for Nav and Hero */}
+            <div className="absolute top-0 left-0 right-0 h-[600px] bg-orange-50/50 -z-0" />
 
-            <main className="max-w-7xl mx-auto px-8 py-20">
+            {/* Page Hero Section */}
+            <section className="relative pt-12 pb-20 overflow-hidden z-10">
+                {/* Background Decor */}
+                <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-orange-200/10 rounded-full blur-[120px] animate-pulse" />
+                <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-orange-100/20 rounded-full blur-[100px]" />
+
+                {/* Decorative plus signs */}
+                <div className="absolute top-20 left-[10%] text-orange-200 opacity-40 select-none">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="currentColor">
+                        <path d="M19 0h2v40h-2z" /><path d="M0 19h40v2H0z" />
+                    </svg>
+                </div>
+                <div className="absolute bottom-20 right-[15%] text-orange-200 opacity-40 select-none">
+                    <svg width="30" height="30" viewBox="0 0 40 40" fill="currentColor">
+                        <path d="M19 0h2v40h-2z" /><path d="M0 19h40v2H0z" />
+                    </svg>
+                </div>
+
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10">
+                    <div className="text-center max-w-3xl mx-auto">
+                        <div className="flex items-center justify-center gap-2 text-sm text-gray-400 mb-6 font-bold uppercase tracking-widest">
+                            <Link href="/produk" className="hover:text-orange-600 transition-colors">Katalog</Link>
+                            <span className="text-gray-300">/</span>
+                            <span className="text-orange-600 font-black">{category.name}</span>
+                        </div>
+
+                        <h1 className="text-5xl md:text-7xl font-[1000] text-gray-900 tracking-tight leading-[1.1] mb-8 capitalize">
+                            {category.name}
+                        </h1>
+
+                        <p className="text-lg md:text-xl text-gray-500 font-medium leading-relaxed">
+                            {category.description || `Menampilkan koleksi produk terbaik kami dalam kategori ${category.name}.`}
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <main className="max-w-7xl mx-auto px-8 py-20 relative z-10 bg-white">
                 {products.length === 0 ? (
                     <div className="text-center py-20 bg-gray-50 rounded-[40px] border-2 border-dashed border-gray-200">
                         <div className="text-gray-400 font-medium mb-4">Belum ada produk dalam kategori ini.</div>
@@ -70,38 +95,67 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
                         {products.map((product: any) => (
-                            <Link
-                                href={`/produk/${product.slug}`}
+                            <div
                                 key={product.id}
-                                className="group bg-white border border-gray-100 rounded-[32px] p-8 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
+                                className="group bg-white rounded-[40px] border border-gray-100/50 shadow-sm hover:shadow-[0_40px_80px_-20px_rgba(249,115,22,0.12)] transition-all duration-700 flex flex-col overflow-hidden"
                             >
-                                {product.images && product.images.length > 0 && (
-                                    <div className="aspect-square relative mb-8 bg-gray-50 rounded-2xl overflow-hidden p-6 group-hover:bg-orange-50 transition-colors">
-                                        {typeof product.images[0].directus_files_id === 'object' && product.images[0].directus_files_id !== null && (
-                                            <Image
-                                                src={`http://localhost:8055/assets/${product.images[0].directus_files_id.id}`}
-                                                alt={product.name}
-                                                fill
-                                                className="object-contain transition-transform duration-700 group-hover:scale-110"
-                                            />
-                                        )}
+                                {/* Image Container with sophisticated hover */}
+                                <Link href={`/produk/${product.slug}`} className="aspect-square relative overflow-hidden bg-gray-50/50 group-hover:bg-white transition-colors duration-700">
+                                    {product.images && product.images.length > 0 && typeof product.images[0].directus_files_id === 'object' && product.images[0].directus_files_id !== null ? (
+                                        <Image
+                                            src={`http://localhost:8055/assets/${product.images[0].directus_files_id.id}`}
+                                            alt={product.name}
+                                            fill
+                                            className="object-contain p-10 transition-transform duration-1000 group-hover:scale-110"
+                                        />
+                                    ) : (
+                                        <div className="absolute inset-0 flex items-center justify-center flex-col gap-3 text-gray-200">
+                                            <svg className="w-16 h-16 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                        </div>
+                                    )}
+
+                                    {/* Advanced Hover Overlay */}
+                                    <div className="absolute inset-0 bg-orange-500/0 group-hover:bg-orange-500/5 transition-all duration-700 flex items-center justify-center">
+                                        <div className="bg-gray-950 text-white px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-[0.2em] opacity-0 translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 shadow-2xl scale-90 group-hover:scale-100">
+                                            Lihat Detail
+                                        </div>
                                     </div>
-                                )}
-                                <div className="space-y-4">
-                                    <h2 className="text-2xl font-bold text-gray-900 group-hover:text-orange-600 transition-colors">
-                                        {product.name}
-                                    </h2>
-                                    <div
-                                        className="text-gray-500 line-clamp-2 leading-relaxed"
-                                        dangerouslySetInnerHTML={{ __html: product.description }}
-                                    />
-                                    <div className="flex items-center justify-between pt-4">
-                                        <span className="text-orange-600 font-bold group-hover:translate-x-2 transition-transform">
-                                            Selengkapnya →
-                                        </span>
+                                </Link>
+
+                                {/* Enhanced Content Area */}
+                                <div className="p-10 flex flex-col flex-1">
+                                    <div className="mb-6">
+                                        <div className="flex items-center gap-2 mb-4">
+                                            <span className="w-6 h-[1.5px] bg-orange-500/40" />
+                                            <span className="text-[10px] font-[1000] uppercase tracking-[0.2em] text-orange-500">Premium Series</span>
+                                        </div>
+                                        <Link href={`/produk/${product.slug}`} className="text-2xl font-[1000] text-gray-900 group-hover:text-orange-600 transition-colors line-clamp-1 block mb-3 tracking-tight leading-tight">
+                                            {product.name}
+                                        </Link>
+                                        <div
+                                            className="text-gray-500 text-sm line-clamp-2 leading-relaxed font-medium"
+                                            dangerouslySetInnerHTML={{ __html: product.description }}
+                                        />
+                                    </div>
+
+                                    <div className="mt-auto flex items-center justify-between gap-4 pt-8 border-t border-gray-50">
+                                        <div>
+                                            <span className="text-[10px] font-[1000] text-gray-400 uppercase tracking-[0.2em] block mb-1">Status Harga</span>
+                                            <span className="text-xl font-[1000] text-gray-950">Hubungi Kami</span>
+                                        </div>
+                                        <Link
+                                            href={`/produk/${product.slug}`}
+                                            className="w-14 h-14 rounded-[22px] bg-orange-50 flex items-center justify-center text-orange-600 hover:bg-orange-500 hover:text-white transition-all duration-500 hover:rotate-[360deg] shadow-sm hover:shadow-orange-500/20"
+                                        >
+                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                            </svg>
+                                        </Link>
                                     </div>
                                 </div>
-                            </Link>
+                            </div>
                         ))}
                     </div>
                 )}
