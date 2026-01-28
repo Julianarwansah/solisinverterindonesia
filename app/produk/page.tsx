@@ -40,9 +40,9 @@ export default async function ProductsPage() {
 
     // Fallback categories if empty
     const displayCategories = categories.length > 0 ? categories : [
-        { name: 'Residential Inverters', slug: 'residential', description: 'Solutions for homes' },
-        { name: 'Commercial Inverters', slug: 'commercial', description: 'Solutions for business' },
-        { name: 'Hybrid Systems', slug: 'utility', description: 'Large scale projects' },
+        { name: 'Inverter Residensial', slug: 'residensial', description: 'Solusi untuk rumah' },
+        { name: 'Inverter Komersial', slug: 'komersial', description: 'Solusi untuk bisnis' },
+        { name: 'Sistem Hybrid', slug: 'utilitas', description: 'Proyek skala besar' },
     ];
 
     return (
@@ -51,9 +51,9 @@ export default async function ProductsPage() {
             <div className="bg-white border-b border-gray-200">
                 <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-8">
                     <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
-                        <Link href="/" className="hover:text-orange-600 transition-colors">Home</Link>
+                        <Link href="/" className="hover:text-orange-600 transition-colors">Beranda</Link>
                         <span>/</span>
-                        <span className="text-gray-900 font-bold">Products</span>
+                        <span className="text-gray-900 font-bold">Produk</span>
                     </div>
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
@@ -62,9 +62,9 @@ export default async function ProductsPage() {
                         </div>
                         {/* Sort UI - Simulation */}
                         <div className="flex items-center gap-4">
-                            <span className="text-sm font-bold text-gray-400 uppercase tracking-widest hidden sm:block">Sort By:</span>
+                            <span className="text-sm font-black text-gray-400 uppercase tracking-widest hidden sm:block">Urutkan:</span>
                             <div className="px-5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold text-gray-700 cursor-pointer hover:border-orange-500 transition-all flex items-center gap-3">
-                                Newest Arrivals
+                                Produk Terbaru
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                 </svg>
@@ -81,16 +81,16 @@ export default async function ProductsPage() {
                     <aside className="hidden lg:block lg:col-span-3 space-y-10">
                         {/* Categories List */}
                         <div>
-                            <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-6 py-2 border-l-4 border-orange-500 pl-4">Categories</h3>
+                            <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-6 py-2 border-l-4 border-orange-500 pl-4">Kategori</h3>
                             <div className="space-y-2">
-                                <Link href="/products" className="flex items-center justify-between group p-3 rounded-2xl bg-orange-600 text-white shadow-lg shadow-orange-500/20 font-bold transition-all">
-                                    <span>All Products</span>
+                                <Link href="/produk" className="flex items-center justify-between group p-3 rounded-2xl bg-orange-600 text-white shadow-lg shadow-orange-500/20 font-bold transition-all">
+                                    <span>Semua Produk</span>
                                     <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">{products.length}</span>
                                 </Link>
                                 {displayCategories.map((cat: any) => (
                                     <Link
                                         key={cat.id || cat.slug}
-                                        href={`/products/category/${cat.slug}`}
+                                        href={`/produk/kategori/${cat.slug}`}
                                         className="flex items-center justify-between group p-3 rounded-2xl text-gray-500 hover:text-orange-600 hover:bg-white hover:shadow-sm transition-all font-bold"
                                     >
                                         <span>{cat.name}</span>
@@ -127,7 +127,7 @@ export default async function ProductsPage() {
                                     className="group bg-white rounded-[32px] border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-orange-500/5 transition-all duration-500 flex flex-col overflow-hidden"
                                 >
                                     {/* Image Container */}
-                                    <Link href={`/products/${product.slug}`} className="aspect-square relative overflow-hidden bg-gray-50 group-hover:bg-white transition-colors duration-500">
+                                    <Link href={`/produk/${product.slug}`} className="aspect-square relative overflow-hidden bg-gray-50 group-hover:bg-white transition-colors duration-500">
                                         {product.images?.[0]?.directus_files_id ? (
                                             <Image
                                                 src={`http://localhost:8055/assets/${product.images[0].directus_files_id.id}`}
@@ -145,7 +145,7 @@ export default async function ProductsPage() {
                                         {/* Hover Overlay */}
                                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-500 flex items-center justify-center">
                                             <div className="bg-white/90 backdrop-blur-sm px-6 py-2.5 rounded-full border border-gray-200 text-sm font-bold text-gray-900 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 shadow-xl">
-                                                Quick View
+                                                Lihat Detil
                                             </div>
                                         </div>
                                     </Link>
@@ -153,8 +153,8 @@ export default async function ProductsPage() {
                                     {/* Content Area */}
                                     <div className="p-7 flex flex-col flex-1">
                                         <div className="mb-4">
-                                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500 mb-2 block">Series Inverter</span>
-                                            <Link href={`/products/${product.slug}`} className="text-xl font-black text-gray-900 group-hover:text-orange-600 transition-colors line-clamp-1 block mb-2 leading-tight">
+                                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500 mb-2 block">Seri Inverter</span>
+                                            <Link href={`/produk/${product.slug}`} className="text-xl font-black text-gray-900 group-hover:text-orange-600 transition-colors line-clamp-1 block mb-2 leading-tight">
                                                 {product.name}
                                             </Link>
                                             <p className="text-gray-400 text-sm line-clamp-2 leading-relaxed font-medium">
@@ -164,11 +164,11 @@ export default async function ProductsPage() {
 
                                         <div className="mt-auto flex items-center justify-between gap-4 pt-6 border-t border-gray-50">
                                             <div>
-                                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Pricing</span>
-                                                <span className="text-lg font-black text-gray-900">Contact For Price</span>
+                                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Harga</span>
+                                                <span className="text-lg font-black text-gray-900">Hubungi Kami</span>
                                             </div>
                                             <Link
-                                                href={`/products/${product.slug}`}
+                                                href={`/produk/${product.slug}`}
                                                 className="w-12 h-12 rounded-2xl bg-gray-950 text-white flex items-center justify-center hover:bg-orange-600 transition-all duration-300 shadow-lg shadow-gray-200 hover:shadow-orange-200"
                                             >
                                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

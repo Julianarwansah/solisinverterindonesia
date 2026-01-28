@@ -1,15 +1,15 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'About Us',
-    description: 'Learn more about Solis Inverter Indonesia - Your trusted partner for solar energy solutions.',
+    title: 'Tentang Kami',
+    description: 'Pelajari lebih lanjut tentang Solis Inverter Indonesia - Mitra terpercaya Anda untuk solusi energi tenaga surya.',
 };
 
 export default function AboutPage() {
     return (
         <div className="min-h-screen p-8 sm:p-20">
             <main className="max-w-4xl mx-auto">
-                <h1 className="text-4xl font-bold mb-6">About Solis Indonesia</h1>
+                <h1 className="text-4xl font-bold mb-6">Tentang Solis Indonesia</h1>
                 <div className="prose prose-lg">
                     <p className="text-gray-600 leading-relaxed">
                         Kami adalah distributor resmi Solis Inverter di Indonesia, menghadirkan teknologi inverter

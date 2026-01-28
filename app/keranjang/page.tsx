@@ -37,7 +37,7 @@ export default function CartPage() {
                         </a>
 
                         <Link
-                            href="/products"
+                            href="/produk"
                             className="px-8 py-4 bg-white border-2 border-gray-200 text-gray-700 font-semibold rounded-full hover:border-orange-600 hover:text-orange-600 transition-all"
                         >
                             Lihat Produk

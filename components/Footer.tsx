@@ -35,11 +35,11 @@ export default function Footer() {
                     <div>
                         <h4 className="text-white font-bold mb-6">Produk</h4>
                         <ul className="space-y-4 text-sm">
-                            <li><Link href="/products" className="hover:text-orange-500 transition-colors">Semua Produk</Link></li>
-                            <li><Link href="/products?category=residential" className="hover:text-orange-500 transition-colors">Residential Inverter</Link></li>
-                            <li><Link href="/products?category=commercial" className="hover:text-orange-500 transition-colors">Commercial Inverter</Link></li>
-                            <li><Link href="/products?category=utility" className="hover:text-orange-500 transition-colors">Utility Inverter</Link></li>
-                            <li><Link href="/products?category=hybrid" className="hover:text-orange-500 transition-colors">Hybrid Inverter</Link></li>
+                            <li><Link href="/produk" className="hover:text-orange-500 transition-colors">Semua Produk</Link></li>
+                            <li><Link href="/produk?category=residential" className="hover:text-orange-500 transition-colors">Inverter Residensial</Link></li>
+                            <li><Link href="/produk?category=commercial" className="hover:text-orange-500 transition-colors">Inverter Komersial</Link></li>
+                            <li><Link href="/produk?category=utility" className="hover:text-orange-500 transition-colors">Inverter Utilitas</Link></li>
+                            <li><Link href="/produk?category=hybrid" className="hover:text-orange-500 transition-colors">Inverter Hybrid</Link></li>
                         </ul>
                     </div>
 
@@ -47,11 +47,11 @@ export default function Footer() {
                     <div>
                         <h4 className="text-white font-bold mb-6">Perusahaan</h4>
                         <ul className="space-y-4 text-sm">
-                            <li><Link href="/about" className="hover:text-orange-500 transition-colors">Tentang Kami</Link></li>
-                            <li><Link href="/news" className="hover:text-orange-500 transition-colors">Berita & Artikel</Link></li>
-                            <li><Link href="/projects" className="hover:text-orange-500 transition-colors">Proyek Referensi</Link></li>
-                            <li><Link href="/contact" className="hover:text-orange-500 transition-colors">Hubungi Kami</Link></li>
-                            <li><Link href="/privacy" className="hover:text-orange-500 transition-colors">Kebijakan Privasi</Link></li>
+                            <li><Link href="/tentang-kami" className="hover:text-orange-500 transition-colors">Tentang Kami</Link></li>
+                            <li><Link href="/artikel" className="hover:text-orange-500 transition-colors">Berita & Artikel</Link></li>
+                            <li><Link href="/proyek" className="hover:text-orange-500 transition-colors">Proyek Referensi</Link></li>
+                            <li><Link href="/kontak" className="hover:text-orange-500 transition-colors">Hubungi Kami</Link></li>
+                            <li><Link href="/privasi" className="hover:text-orange-500 transition-colors">Kebijakan Privasi</Link></li>
                         </ul>
                     </div>
 
@@ -83,11 +83,11 @@ export default function Footer() {
                 </div>
 
                 <div className="pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
-                    <p>&copy; {new Date().getFullYear()} Solis Inverter Indonesia. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} Solis Inverter Indonesia. Hak cipta dilindungi.</p>
                     <div className="flex gap-6">
-                        <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
-                        <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
-                        <Link href="/sitemap" className="hover:text-white transition-colors">Sitemap</Link>
+                        <Link href="/syarat-ketentuan" className="hover:text-white transition-colors">Syarat & Ketentuan</Link>
+                        <Link href="/privasi" className="hover:text-white transition-colors">Kebijakan Privasi</Link>
+                        <Link href="/sitemap" className="hover:text-white transition-colors">Peta Situs</Link>
                     </div>
                 </div>
             </div>

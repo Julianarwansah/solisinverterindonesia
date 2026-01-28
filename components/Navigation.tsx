@@ -8,10 +8,10 @@ export default function Navigation() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const navLinks = [
-        { href: '/', label: 'Home' },
-        { href: '/products', label: 'Products' },
-        { href: '/articles', label: 'Blog' },
-        { href: '/about', label: 'About us' },
+        { href: '/', label: 'Beranda' },
+        { href: '/produk', label: 'Produk' },
+        { href: '/artikel', label: 'Artikel' },
+        { href: '/tentang-kami', label: 'Tentang Kami' },
     ];
 
     return (
@@ -54,7 +54,7 @@ export default function Navigation() {
                             rel="noopener noreferrer"
                             className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-full hover:shadow-2xl transition-all hover:-translate-y-1 text-base flex items-center gap-2 group"
                         >
-                            Contact
+                            Hubungi Kami
                             <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                             </svg>
@@ -151,7 +151,7 @@ export default function Navigation() {
                                 rel="noopener noreferrer"
                                 className="block mt-4 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-xl text-center hover:shadow-lg transition-all"
                             >
-                                Contact
+                                Hubungi Kami
                             </a>
                         </div>
                     </div>

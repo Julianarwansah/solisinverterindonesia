@@ -5,8 +5,8 @@ import Image from 'next/image';
 
 const features = [
     {
-        title: 'AFCI 2.0 Protection',
-        subtitle: 'Safety First',
+        title: 'Proteksi AFCI 2.0',
+        subtitle: 'Keamanan Utama',
         description: 'Algoritma cerdas yang mampu mendeteksi percikan api DC dalam 0.5 detik, menghentikan risiko kebakaran sebelum terjadi.',
         icon: (
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -21,8 +21,8 @@ const features = [
         hasBgImage: true,
     },
     {
-        title: '99.9% Efficiency',
-        subtitle: 'Max Performance',
+        title: 'Efisiensi 99.9%',
+        subtitle: 'Performa Maksimal',
         description: 'Teknologi inverter dengan efisiensi konversi tertinggi di kelasnya untuk ROI maksimal.',
         icon: (
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,7 +38,7 @@ const features = [
     },
     {
         title: 'Solis Cloud',
-        subtitle: 'Smart Control',
+        subtitle: 'Kontrol Cerdas',
         description: 'Kendali penuh sistem PLTS Anda melalui aplikasi mobile cerdas 24/7.',
         icon: (
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,8 +53,8 @@ const features = [
         hasBgImage: false,
     },
     {
-        title: 'IP66 Protection',
-        subtitle: 'Extreme Durability',
+        title: 'Proteksi IP66',
+        subtitle: 'Daya Tahan Ekstrem',
         description: 'Didesain untuk bertahan di cuaca tropis ekstrem Indonesia.',
         icon: (
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,7 +97,7 @@ export default function FeaturesBento() {
                 <div className={`mb-20 max-w-3xl transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     <div className="flex items-center gap-4 mb-6">
                         <span className="flex h-[2px] w-12 bg-orange-600 rounded-full" />
-                        <span className="text-orange-600 font-bold tracking-widest uppercase text-sm">Technology & Innovation</span>
+                        <span className="text-orange-600 font-bold tracking-widest uppercase text-sm">Teknologi & Inovasi</span>
                     </div>
                     <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight">
                         Fitur Unggulan <br />

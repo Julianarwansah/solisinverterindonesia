@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             limit: 1
         }));
 
-        if (!products || products.length === 0) return { title: 'Product Not Found' };
+        if (!products || products.length === 0) return { title: 'Produk Tidak Ditemukan' };
         const product = products[0];
 
         return {

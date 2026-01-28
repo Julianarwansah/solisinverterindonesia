@@ -82,7 +82,7 @@ export default async function FeaturedProducts() {
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 text-orange-600 text-xs font-bold uppercase tracking-widest mb-4">
                         <span className="w-2 h-2 rounded-full bg-orange-600"></span>
-                        Our Best Sellers
+                        Produk Terpopuler
                     </div>
                     <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
                         Produk Pilihan <span className="text-orange-600">Terbaik</span>
@@ -96,7 +96,7 @@ export default async function FeaturedProducts() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
                     {products.map((product) => (
                         <Link
-                            href={`/products/${product.slug}`}
+                            href={`/produk/${product.slug}`}
                             key={product.id}
                             className="group bg-white rounded-3xl p-6 border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-500 hover:-translate-y-2 flex flex-col"
                         >
@@ -114,7 +114,7 @@ export default async function FeaturedProducts() {
                                         <svg className="w-12 h-12 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                         </svg>
-                                        <span className="text-xs uppercase tracking-wider">No Image</span>
+                                        <span className="text-xs uppercase tracking-wider">Tanpa Gambar</span>
                                     </div>
                                 )}
 
@@ -157,7 +157,7 @@ export default async function FeaturedProducts() {
                 {/* View All Button */}
                 <div className="text-center">
                     <Link
-                        href="/products"
+                        href="/produk"
                         className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-slate-900 px-8 py-4 font-bold text-white transition-all duration-300 hover:bg-orange-600 hover:shadow-lg hover:shadow-orange-500/25 active:scale-95"
                     >
                         <span>Lihat Semua Produk</span>

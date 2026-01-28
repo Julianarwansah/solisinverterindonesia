@@ -12,7 +12,7 @@ export default function ContactSection() {
                 <div className="space-y-6 mb-12">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 text-orange-400 text-xs font-bold uppercase tracking-widest border border-orange-500/20">
                         <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-                        Ready to Switch?
+                        Siap Berhemat?
                     </div>
 
                     <h2 className="text-4xl md:text-5xl font-black tracking-tight leading-tight">
@@ -25,7 +25,7 @@ export default function ContactSection() {
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                         <Link
-                            href="/contact"
+                            href="/kontak"
                             className="inline-flex items-center justify-center px-8 py-3 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-full transition-all hover:shadow-lg hover:shadow-orange-600/25 group"
                         >
                             Hubungi Kami Sekarang
@@ -34,7 +34,7 @@ export default function ContactSection() {
                             </svg>
                         </Link>
                         <Link
-                            href="/products"
+                            href="/produk"
                             className="inline-flex items-center justify-center px-8 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-full transition-all border border-slate-700"
                         >
                             Lihat Katalog
@@ -45,16 +45,16 @@ export default function ContactSection() {
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-8 border-y border-slate-800 py-8 mb-12">
                     <div>
-                        <h4 className="text-2xl md:text-3xl font-black text-white">10k+</h4>
-                        <p className="text-xs md:text-sm text-slate-500 uppercase tracking-wider font-medium">Installations</p>
+                        <h4 className="text-2xl md:text-3xl font-black text-white">10rb+</h4>
+                        <p className="text-xs md:text-sm text-slate-500 uppercase tracking-wider font-medium">Pemasangan</p>
                     </div>
                     <div>
                         <h4 className="text-2xl md:text-3xl font-black text-white">15+</h4>
-                        <p className="text-xs md:text-sm text-slate-500 uppercase tracking-wider font-medium">Years Exp</p>
+                        <p className="text-xs md:text-sm text-slate-500 uppercase tracking-wider font-medium">Tahun Pengalaman</p>
                     </div>
                     <div>
                         <h4 className="text-2xl md:text-3xl font-black text-white">24/7</h4>
-                        <p className="text-xs md:text-sm text-slate-500 uppercase tracking-wider font-medium">Support</p>
+                        <p className="text-xs md:text-sm text-slate-500 uppercase tracking-wider font-medium">Dukungan</p>
                     </div>
                 </div>
 

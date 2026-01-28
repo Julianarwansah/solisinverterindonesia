@@ -65,16 +65,16 @@ export default function Hero() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
               </span>
-              Leading Inverter Solution
+              Solusi Inverter Terkemuka
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-[900] text-gray-900 leading-[1.1] tracking-tight">
-              Energy for <br className="hidden sm:block" />
+              Energi Pasokan <br className="hidden sm:block" />
               <span className="text-orange-500">
-                Sustainable
+                Masa Depan
               </span>
               <br className="hidden sm:block" />
-              Future
+              Berkelanjutan
             </h1>
 
             <p className="text-base md:text-xl text-gray-500 max-w-lg mx-auto lg:mx-0 leading-relaxed font-medium">
@@ -89,30 +89,30 @@ export default function Hero() {
               rel="noopener noreferrer"
               className="px-8 md:px-12 py-4 md:py-5 bg-orange-500 text-white font-black rounded-full text-base md:text-lg shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 group"
             >
-              Get in touch
+              Hubungi Kami
               <svg className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </a>
 
             <Link
-              href="/products"
+              href="/produk"
               className="px-8 md:px-12 py-4 md:py-5 bg-white border-2 border-gray-100 text-gray-900 font-black rounded-full text-base md:text-lg hover:border-orange-500 hover:text-orange-500 transition-all duration-300 flex items-center justify-center"
             >
-              Explore
+              Jelajahi Produk
             </Link>
           </div>
 
           {/* Quick Stats */}
           <div className="pt-6 md:pt-8 flex items-center justify-center lg:justify-start gap-6 md:gap-8 border-t border-gray-100">
             <div>
-              <div className="text-xl md:text-2xl font-black text-gray-900">10k+</div>
-              <div className="text-[10px] md:text-sm text-gray-400 font-bold uppercase tracking-wider">Happy Homes</div>
+              <div className="text-xl md:text-2xl font-black text-gray-900">10rb+</div>
+              <div className="text-[10px] md:text-sm text-gray-400 font-bold uppercase tracking-wider">Rumah Terpasang</div>
             </div>
             <div className="w-px h-8 md:h-10 bg-gray-100" />
             <div>
               <div className="text-xl md:text-2xl font-black text-gray-900">99.9%</div>
-              <div className="text-[10px] md:text-sm text-gray-400 font-bold uppercase tracking-wider">Efficiency</div>
+              <div className="text-[10px] md:text-sm text-gray-400 font-bold uppercase tracking-wider">Efisiensi</div>
             </div>
           </div>
         </div>

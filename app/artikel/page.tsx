@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Articles | Solis Inverter Indonesia',
-    description: 'Read the latest news and articles about Solis Inverters in Indonesia.',
+    title: 'Artikel | Solis Inverter Indonesia',
+    description: 'Baca berita dan artikel terbaru seputar Solis Inverter di Indonesia.',
 };
 
 async function getArticles(): Promise<Article[]> {
@@ -28,11 +28,11 @@ export default async function ArticlesPage() {
     return (
         <div className="min-h-screen p-8 sm:p-20">
             <main className="max-w-4xl mx-auto flex flex-col gap-8">
-                <Link href="/" className="text-blue-600 hover:underline">← Back to Products</Link>
-                <h1 className="text-4xl font-bold">Latest Articles</h1>
+                <Link href="/" className="text-blue-600 hover:underline">← Kembali ke Beranda</Link>
+                <h1 className="text-4xl font-bold">Artikel Terbaru</h1>
 
                 {articles.length === 0 ? (
-                    <p>No articles found.</p>
+                    <p>Artikel tidak ditemukan.</p>
                 ) : (
                     <div className="grid grid-cols-1 gap-12">
                         {articles.map((article: any) => (
@@ -62,7 +62,7 @@ export default async function ArticlesPage() {
                                         ))}
                                     </div>
                                     <button className="text-blue-600 font-bold hover:translate-x-1 transition-transform">
-                                        Read More →
+                                        Baca Selengkapnya →
                                     </button>
                                 </div>
                             </article>

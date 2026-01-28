@@ -19,22 +19,22 @@ interface CategorySectionProps {
 const FALLBACK_CATEGORIES: Category[] = [
     {
         id: 'res',
-        name: 'Residential Inverters',
-        slug: 'residential',
+        name: 'Inverter Residensial',
+        slug: 'residensial',
         description: 'Solusi inverter cerdas untuk hunian. Efisiensi tinggi, desain kompak, dan pemantauan real-time untuk hemat daya rumah tangga Anda.',
         image: '/images/hero_1.png'
     },
     {
         id: 'com',
-        name: 'Commercial Solutions',
-        slug: 'commercial',
+        name: 'Solusi Komersial',
+        slug: 'komersial',
         description: 'Konversi energi skala besar untuk bisnis dan industri. Teknologi string inverter tercanggih untuk ROI maksimal dan sistem yang handal.',
         image: '/images/hero_2.png'
     },
     {
         id: 'util',
-        name: 'Utility-Scale Hybrid',
-        slug: 'utility',
+        name: 'Skala Utilitas Hybrid',
+        slug: 'utilitas',
         description: 'Sistem penyimpanan energi terintegrasi untuk stabilitas grid. Masa depan energi bersih dengan manajemen daya cerdas 24/7.',
         image: '/images/hero_3.png'
     }
@@ -86,7 +86,7 @@ export default function CategorySection({ categories }: CategorySectionProps) {
                             <span className="text-orange-500">Produk Unggulan</span>
                         </h2>
                     </div>
-                    <Link href="/products" className="group flex items-center gap-3 px-8 py-4 bg-orange-500 text-white rounded-full font-bold hover:bg-orange-600 transition-all shadow-lg shadow-orange-200">
+                    <Link href="/produk" className="group flex items-center gap-3 px-8 py-4 bg-orange-500 text-white rounded-full font-bold hover:bg-orange-600 transition-all shadow-lg shadow-orange-200">
                         Lihat Semua Produk
                         <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -99,7 +99,7 @@ export default function CategorySection({ categories }: CategorySectionProps) {
 
                     {/* Left: Interactive Image */}
                     <Link
-                        href={`/products/category/${activeCategory.slug}`}
+                        href={`/produk/kategori/${activeCategory.slug}`}
                         className={`lg:col-span-7 relative aspect-[16/10] rounded-[40px] overflow-hidden shadow-2xl group transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
                     >
                         <Image
@@ -121,7 +121,7 @@ export default function CategorySection({ categories }: CategorySectionProps) {
                     {/* Right: Category Details & Navigation */}
                     <div className={`lg:col-span-5 space-y-10 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
                         <div className="space-y-6">
-                            <Link href={`/products/category/${activeCategory.slug}`} className="inline-block group/title">
+                            <Link href={`/produk/kategori/${activeCategory.slug}`} className="inline-block group/title">
                                 <h3 className="text-3xl md:text-4xl font-black text-orange-500 group-hover/title:text-orange-600 transition-all duration-500">
                                     {activeCategory.name}
                                 </h3>
