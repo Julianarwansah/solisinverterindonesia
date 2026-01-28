@@ -12,6 +12,7 @@ export default function Navigation() {
         { href: '/tentang-kami', label: 'Tentang Kami' },
         { href: '/produk', label: 'Produk' },
         { href: '/artikel', label: 'Artikel' },
+        { href: '/kontak', label: 'Kontak' },
     ];
 
     return (
