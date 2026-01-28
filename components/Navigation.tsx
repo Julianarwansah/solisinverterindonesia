@@ -47,12 +47,7 @@ export default function Navigation() {
 
                     {/* Action Buttons - Right */}
                     <div className="flex items-center gap-6">
-                        <Link
-                            href="/cart"
-                            className="text-gray-700 hover:text-orange-600 font-semibold transition-colors text-base"
-                        >
-                            Cart(0)
-                        </Link>
+
                         <a
                             href="https://wa.me/628123456789"
                             target="_blank"
