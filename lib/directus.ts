@@ -1,4 +1,4 @@
-import { createDirectus, rest, readItems } from '@directus/sdk';
+import { createDirectus, rest, readItems, authentication, staticToken } from '@directus/sdk';
 
 export interface Product {
     id: string;
@@ -55,14 +55,14 @@ interface Schema {
 }
 
 const directus = createDirectus<Schema>(process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://localhost:8055')
-    .with(rest({
-        onRequest: (options) => ({
-            ...options,
-            headers: {
-                ...options.headers,
-                'Authorization': `Bearer ${process.env.DIRECTUS_TOKEN}`
-            }
-        })
-    }));
+    .with(staticToken(process.env.DIRECTUS_TOKEN || ''))
+    .with(authentication('cookie', { credentials: 'omit' })) // Use cookie-based auth for sessions
+    .with(rest());
+
+export const getAuthenticatedClient = (token: string) => {
+    return createDirectus<Schema>(process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://localhost:8055')
+        .with(staticToken(token))
+        .with(rest());
+};
 
 export default directus;
