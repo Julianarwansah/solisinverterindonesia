@@ -20,10 +20,14 @@ export interface Category {
     name: string;
     slug: string;
     description?: string;
+    parent_category?: string | Category;
+    display_type?: 'default' | 'products' | 'subcategories' | 'both';
+    thumbnail?: string | DirectusFile;
     seo_title?: string;
     seo_description?: string;
     seo_keywords?: string[];
 }
+
 
 export interface Article {
     id: string;

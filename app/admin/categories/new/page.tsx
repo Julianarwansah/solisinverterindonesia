@@ -1,6 +1,22 @@
+import directus from '@/lib/directus';
+import { readItems } from '@directus/sdk';
 import CategoryForm from '@/components/admin/CategoryForm';
 
-export default function NewCategoryPage() {
+async function getCategories() {
+    try {
+        const response = await directus.request(readItems('product_categories', {
+            fields: ['id', 'name'] as any,
+        }));
+        return response as any[];
+    } catch (error) {
+        console.error('Error fetching categories:', error);
+        return [];
+    }
+}
+
+export default async function NewCategoryPage() {
+    const categories = await getCategories();
+
     return (
         <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="bg-white p-12 rounded-[50px] shadow-sm border border-gray-100">
@@ -9,7 +25,7 @@ export default function NewCategoryPage() {
                 <p className="mt-4 text-xl font-medium text-gray-400 max-w-2xl">Organisir produk Anda dengan membuat kategori baru yang deskriptif.</p>
             </div>
 
-            <CategoryForm />
+            <CategoryForm categories={categories} />
         </div>
     );
 }

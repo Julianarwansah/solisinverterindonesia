@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useProductActions } from '@/lib/admin-actions';
+import { useRouter } from 'next/navigation';
+import { saveProductAction } from '@/lib/admin-actions';
 import { Product, Category } from '@/lib/directus';
 
 interface ProductFormProps {
@@ -24,7 +25,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const { saveProduct } = useProductActions();
+    const router = useRouter();
     const [keywordInput, setKeywordInput] = useState('');
 
     const handleAddKeyword = (e: React.KeyboardEvent) => {
@@ -70,9 +71,12 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
         setLoading(true);
         setError('');
 
-        const result = await saveProduct(formData, initialData?.id);
+        const result = await saveProductAction(formData, initialData?.id);
 
-        if (!result.success) {
+        if (result.success) {
+            router.push('/admin/products');
+            router.refresh();
+        } else {
             setError(result.error || 'Terjadi kesalahan saat menyimpan produk.');
             setLoading(false);
         }

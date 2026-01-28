@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useArticleActions } from '@/lib/admin-actions';
+import { useRouter } from 'next/navigation';
+import { saveArticleAction } from '@/lib/admin-actions';
 import { Article } from '@/lib/directus';
 
 interface ArticleFormProps {
@@ -21,7 +22,7 @@ export default function ArticleForm({ initialData }: ArticleFormProps) {
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const { saveArticle } = useArticleActions();
+    const router = useRouter();
 
     // Auto-generate slug from title
     useEffect(() => {
@@ -39,9 +40,12 @@ export default function ArticleForm({ initialData }: ArticleFormProps) {
         setLoading(true);
         setError('');
 
-        const result = await saveArticle(formData, initialData?.id);
+        const result = await saveArticleAction(formData, initialData?.id);
 
-        if (!result.success) {
+        if (result.success) {
+            router.push('/admin/articles');
+            router.refresh();
+        } else {
             setError(result.error || 'Terjadi kesalahan saat menyimpan artikel.');
             setLoading(false);
         }
@@ -261,7 +265,5 @@ export default function ArticleForm({ initialData }: ArticleFormProps) {
             )}
         </form>
     );
-
-        </form >
-    );
 }
+

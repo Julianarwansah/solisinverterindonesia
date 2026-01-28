@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useProductActions, useArticleActions, useCategoryActions } from '@/lib/admin-actions';
+import { removeArticleAction, removeCategoryAction, removeProductAction } from '@/lib/admin-actions';
 
 interface DeleteButtonProps {
     id: string;
@@ -10,18 +10,17 @@ interface DeleteButtonProps {
 
 export default function DeleteButton({ id, type }: DeleteButtonProps) {
     const [loading, setLoading] = useState(false);
-    const { removeProduct } = useProductActions();
-    const { removeArticle } = useArticleActions();
-    const { removeCategory } = useCategoryActions();
 
     const handleDelete = async () => {
+        if (!confirm('Apakah Anda yakin ingin menghapus item ini?')) return;
+
         setLoading(true);
         if (type === 'product') {
-            await removeProduct(id);
+            await removeProductAction(id);
         } else if (type === 'article') {
-            await removeArticle(id);
+            await removeArticleAction(id);
         } else if (type === 'product_categories') {
-            await removeCategory(id);
+            await removeCategoryAction(id);
         }
         setLoading(false);
     };

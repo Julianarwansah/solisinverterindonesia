@@ -1,7 +1,19 @@
 import directus from '@/lib/directus';
-import { readItem } from '@directus/sdk';
+import { readItem, readItems } from '@directus/sdk';
 import CategoryForm from '@/components/admin/CategoryForm';
 import { notFound } from 'next/navigation';
+
+async function getCategories() {
+    try {
+        const response = await directus.request(readItems('product_categories', {
+            fields: ['id', 'name'] as any,
+        }));
+        return response as any[];
+    } catch (error) {
+        console.error('Error fetching categories:', error);
+        return [];
+    }
+}
 
 async function getCategory(id: string) {
     try {
@@ -16,7 +28,10 @@ async function getCategory(id: string) {
 
 export default async function EditCategoryPage({ params }: any) {
     const { id } = await params;
-    const category = await getCategory(id);
+    const [category, categories] = await Promise.all([
+        getCategory(id),
+        getCategories(),
+    ]);
 
     if (!category) {
         notFound();
@@ -30,7 +45,7 @@ export default async function EditCategoryPage({ params }: any) {
                 <p className="mt-4 text-xl font-medium text-gray-400 max-w-2xl">Perbarui informasi untuk kategori <span className="text-orange-600 font-black">{category.name}</span>.</p>
             </div>
 
-            <CategoryForm initialData={category as any} />
+            <CategoryForm initialData={category as any} categories={categories} />
         </div>
     );
 }
