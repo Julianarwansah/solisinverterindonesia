@@ -17,8 +17,6 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
         category: initialData?.category ? (typeof initialData.category === 'string' ? initialData.category : initialData.category.id) : '',
         description: initialData?.description || '',
         short_description: initialData?.short_description || '',
-        regular_price: initialData?.regular_price || '',
-        sale_price: initialData?.sale_price || '',
         meta_title: initialData?.meta_title || '',
         meta_description: initialData?.meta_description || '',
         keywords: initialData?.keywords || [] as string[],
@@ -39,8 +37,21 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
         }
     };
 
-    const removeKeyword = (tag: string) => {
-        setFormData({ ...formData, keywords: formData.keywords.filter(k => k !== tag) });
+    const generateSlug = () => {
+        const slug = formData.name
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '') // Remove special characters
+            .replace(/\s+/g, '-')     // Replace spaces with -
+            .replace(/-+/g, '-')      // Replace multiple - with single -
+            .trim();
+        setFormData({ ...formData, slug });
+    };
+
+    const removeKeyword = (tagToRemove: string) => {
+        setFormData({
+            ...formData,
+            keywords: formData.keywords.filter(tag => tag !== tagToRemove)
+        });
     };
 
     // Auto-generate slug from name
@@ -111,41 +122,18 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                     </div>
                 </div>
 
-                {/* Pricing Meta Box */}
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                    <div className="px-5 py-3 border-b border-gray-200 bg-gray-50 flex items-center gap-2">
-                        <h3 className="text-sm font-bold text-gray-700">Harga Produk</h3>
-                    </div>
-                    <div className="p-6 space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-600">Harga Reguler (IDR)</label>
-                                <input
-                                    type="text"
-                                    value={formData.regular_price}
-                                    onChange={(e) => setFormData({ ...formData, regular_price: e.target.value })}
-                                    className="w-full px-3 py-2 bg-white border border-gray-300 rounded focus:border-blue-500 outline-none transition-all text-sm shadow-sm"
-                                    placeholder="0"
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-600">Harga Obral (IDR)</label>
-                                <input
-                                    type="text"
-                                    value={formData.sale_price}
-                                    onChange={(e) => setFormData({ ...formData, sale_price: e.target.value })}
-                                    className="w-full px-3 py-2 bg-white border border-gray-300 rounded focus:border-blue-500 outline-none transition-all text-sm shadow-sm"
-                                    placeholder="0"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 {/* Slug Meta Box */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                    <div className="px-5 py-3 border-b border-gray-200 bg-gray-50">
+                    <div className="px-5 py-3 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
                         <h3 className="text-sm font-bold text-gray-700">Slug</h3>
+                        <button
+                            type="button"
+                            onClick={generateSlug}
+                            className="text-[10px] font-bold text-blue-600 hover:text-blue-800 uppercase tracking-tighter bg-blue-50 px-2 py-1 rounded border border-blue-100 transition-all"
+                        >
+                            Generate from Name
+                        </button>
                     </div>
                     <div className="p-5">
                         <div className="flex items-center gap-2 text-sm text-gray-400 bg-gray-50 px-3 py-2 rounded border border-gray-200">
