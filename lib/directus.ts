@@ -6,6 +6,9 @@ export interface Product {
     name: string;
     slug: string;
     description: string;
+    short_description?: string;
+    regular_price?: number | string;
+    sale_price?: number | string;
     category: string | Category;
     tags: string[];
     images: string[] | any[]; // Simplified for SDK better handling
