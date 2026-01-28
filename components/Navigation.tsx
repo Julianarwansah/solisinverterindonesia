@@ -56,9 +56,6 @@ export default function Navigation() {
                             className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-full hover:shadow-2xl transition-all hover:-translate-y-1 text-base flex items-center gap-2 group"
                         >
                             Hubungi Kami
-                            <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
                         </a>
                     </div>
                 </nav>
