@@ -4,6 +4,18 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+async function getCategories() {
+    try {
+        const categories = await directus.request(readItems('product_categories', {
+            fields: ['*'] as any,
+        }));
+        return categories;
+    } catch (error) {
+        console.error('Error fetching categories:', error);
+        return [];
+    }
+}
+
 async function getCategoryData(slug: string) {
     try {
         const categories = await directus.request(readItems('product_categories', {
@@ -34,7 +46,10 @@ async function getProductsByCategory(categoryId: string) {
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    const category = await getCategoryData(slug);
+    const [category, allCategories] = await Promise.all([
+        getCategoryData(slug),
+        getCategories()
+    ]);
 
     if (!category) {
         notFound();
@@ -77,6 +92,27 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                         <p className="text-lg md:text-xl text-gray-500 font-medium leading-relaxed">
                             {category.description || `Menampilkan koleksi produk terbaik kami dalam kategori ${category.name}.`}
                         </p>
+                    </div>
+
+                    {/* Mobile Category Filter - Horizontal Scroll */}
+                    <div className="lg:hidden mt-12 -mx-2 overflow-x-auto no-scrollbar pb-2">
+                        <div className="flex items-center gap-3 px-2 min-w-max">
+                            <Link href="/produk" className="px-6 py-3 rounded-2xl bg-white border border-gray-100 text-sm font-bold text-gray-600">
+                                Katalog
+                            </Link>
+                            {allCategories.map((cat: any) => (
+                                <Link
+                                    key={cat.id || cat.slug}
+                                    href={`/produk/kategori/${cat.slug}`}
+                                    className={`px-6 py-3 rounded-2xl text-sm font-black transition-all ${cat.slug === slug
+                                            ? 'bg-gray-950 text-white shadow-xl shadow-gray-950/10'
+                                            : 'bg-white border border-gray-100 text-gray-600 hover:border-orange-200 hover:text-orange-600'
+                                        }`}
+                                >
+                                    {cat.name}
+                                </Link>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>
@@ -157,6 +193,23 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                             ))}
                         </div>
                     )}
+
+                    {/* Mobile Help Card - Visible only on mobile */}
+                    <div className="lg:hidden mt-20">
+                        <div className="relative rounded-[40px] p-10 bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 text-white overflow-hidden shadow-2xl shadow-gray-950/50 group">
+                            <div className="absolute top-0 right-0 w-40 h-40 bg-orange-500/20 rounded-full blur-[60px] -translate-y-1/2 translate-x-1/2" />
+                            <div className="relative z-10 flex flex-col items-center text-center">
+                                <h4 className="text-2xl font-black mb-4 tracking-tight">Butuh Bantuan Ahli?</h4>
+                                <p className="text-slate-400 mb-8 leading-relaxed font-medium">Tim kami siap membantu Anda memilih solusi energi terbaik.</p>
+                                <a
+                                    href="https://wa.me/6281258885595"
+                                    className="w-full py-4 bg-orange-500 rounded-2xl text-xs font-black uppercase tracking-[0.2em] text-center"
+                                >
+                                    WhatsApp Kami
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </main>
             </div>
         </div>
