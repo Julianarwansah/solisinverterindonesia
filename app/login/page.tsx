@@ -30,8 +30,8 @@ export default function LoginPage() {
                 throw new Error(data.message || 'Login gagal. Silakan periksa kembali email dan password Anda.');
             }
 
-            // Redirect to home or admin dashboard once implemented
-            router.push('/');
+            // Redirect to admin dashboard
+            router.push('/admin');
             router.refresh();
         } catch (err: any) {
             setError(err.message);

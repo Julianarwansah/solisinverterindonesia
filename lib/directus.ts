@@ -56,7 +56,6 @@ interface Schema {
 
 const directus = createDirectus<Schema>(process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://localhost:8055')
     .with(staticToken(process.env.DIRECTUS_TOKEN || ''))
-    .with(authentication('cookie', { credentials: 'omit' })) // Use cookie-based auth for sessions
     .with(rest());
 
 export const getAuthenticatedClient = (token: string) => {

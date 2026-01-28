@@ -6,6 +6,7 @@
         "start": "npx directus start"
     },
     "dependencies": {
+        "argon2": "^0.44.0",
         "directus": "^11.14.1",
         "mysql2": "^3.16.2"
     }

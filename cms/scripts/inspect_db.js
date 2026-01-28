@@ -15,7 +15,10 @@ async function inspect() {
         try {
             const [users] = await connection.execute('SELECT id, email, status, role FROM directus_users');
             console.log('USERS_COUNT:', users.length);
-            if (users.length > 0) console.log('FIRST_USER_EMAIL:', users[0].email);
+            users.forEach((u, i) => {
+                const hex = Buffer.from(u.email).toString('hex');
+                console.log(`USER_${i}_EMAIL:`, `"${u.email}"`, `(HEX: ${hex})`);
+            });
         } catch (e) {
             console.log('Error querying directus_users:', e.message);
         }
