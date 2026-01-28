@@ -47,7 +47,7 @@ export default async function EditProductPage({ params }: any) {
                 <p className="text-xl font-medium text-gray-500 max-w-2xl">Perbarui informasi untuk <span className="text-orange-600 font-black">{product.name}</span> di bawah ini.</p>
             </div>
 
-            <ProductForm initialData={product} categories={categories} />
+            <ProductForm initialData={product as any} categories={categories as any} />
         </div>
     );
 }

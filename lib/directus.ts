@@ -19,6 +19,9 @@ export interface Category {
     name: string;
     slug: string;
     description?: string;
+    seo_title?: string;
+    seo_description?: string;
+    seo_keywords?: string[];
 }
 
 export interface Article {

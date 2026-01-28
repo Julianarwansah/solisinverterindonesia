@@ -23,7 +23,7 @@ export default async function NewProductPage() {
                 <p className="text-xl font-medium text-gray-500 max-w-2xl">Lengkapi informasi produk di bawah ini untuk menambahkannya ke katalog.</p>
             </div>
 
-            <ProductForm categories={categories} />
+            <ProductForm categories={categories as any} />
         </div>
     );
 }

@@ -29,7 +29,7 @@ export default async function EditArticlePage({ params }: any) {
                 <p className="text-xl font-medium text-gray-500 max-w-2xl">Perbarui konten artikel <span className="text-orange-600 font-black">{article.title}</span>.</p>
             </div>
 
-            <ArticleForm initialData={article} />
+            <ArticleForm initialData={article as any} />
         </div>
     );
 }

@@ -11,11 +11,39 @@ const navItems = [
     { href: '/admin/articles', label: 'Articles', icon: 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2z' },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+    onClose?: () => void;
+}
+
+import { useRouter } from 'next/navigation';
+
+export default function Sidebar({ onClose }: SidebarProps) {
     const pathname = usePathname();
+    const router = useRouter();
+
+    const handleLogout = async () => {
+        try {
+            const res = await fetch('/api/auth/logout', { method: 'POST' });
+            if (res.ok) {
+                router.push('/login');
+            }
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
 
     return (
-        <aside className="w-80 bg-white border-r border-gray-100 flex flex-col h-screen sticky top-0 z-50">
+        <aside className="w-80 bg-white border-r border-gray-100 flex flex-col h-screen sticky top-0 z-50 overflow-y-auto">
+            {/* Mobile Close Button */}
+            <button
+                onClick={onClose}
+                className="lg:hidden absolute top-8 right-8 p-3 text-gray-400 hover:text-gray-950 bg-gray-50 rounded-2xl transition-all active:scale-90"
+            >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
             {/* Header / Logo Section */}
             <div className="p-10 pb-12">
                 <Link href="/" className="flex items-center gap-4 group">
@@ -44,6 +72,7 @@ export default function Sidebar() {
                         <Link
                             key={item.href}
                             href={item.href}
+                            onClick={onClose}
                             className={`flex items-center gap-5 px-8 py-5 rounded-[24px] font-[1000] transition-all duration-300 group ${isActive
                                 ? 'bg-gray-950 text-white shadow-2xl shadow-gray-950/20 translate-x-1'
                                 : 'text-gray-400 hover:text-gray-950 hover:bg-gray-50'
@@ -60,9 +89,9 @@ export default function Sidebar() {
 
             {/* Footer / User Session */}
             <div className="p-8 border-t border-gray-50">
-                <Link
-                    href="/"
-                    className="flex items-center gap-5 px-8 py-5 rounded-[24px] font-[1000] text-gray-400 hover:text-red-600 hover:bg-red-50 transition-all duration-300 group"
+                <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-5 px-8 py-5 rounded-[24px] font-[1000] text-gray-400 hover:text-red-600 hover:bg-red-50 transition-all duration-300 group text-left"
                 >
                     <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center group-hover:bg-red-100 transition-colors">
                         <svg className="w-6 h-6 text-gray-300 group-hover:text-red-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,7 +99,7 @@ export default function Sidebar() {
                         </svg>
                     </div>
                     <span>Keluar</span>
-                </Link>
+                </button>
             </div>
         </aside>
     );
