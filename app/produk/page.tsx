@@ -46,7 +46,7 @@ export default async function ProductsPage() {
     ];
 
     return (
-        <main className="bg-gray-50 min-h-screen pt-24">
+        <main className="bg-white min-h-screen pt-24">
             {/* Breadcrumbs & Simple Header */}
             <div className="bg-white border-b border-gray-200">
                 <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-8">

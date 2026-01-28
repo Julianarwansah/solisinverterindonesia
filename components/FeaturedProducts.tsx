@@ -75,7 +75,7 @@ export default async function FeaturedProducts() {
     const products = dbProducts.length > 0 ? dbProducts : placeholderProducts;
 
     return (
-        <section className="py-24 bg-slate-50">
+        <section className="py-24 bg-white">
             <div className="max-w-[1440px] mx-auto px-6 md:px-12">
 
                 {/* Section Header */}

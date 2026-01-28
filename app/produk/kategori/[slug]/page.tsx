@@ -45,7 +45,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     return (
         <div className="min-h-screen bg-white">
             {/* Header Section */}
-            <div className="bg-gray-50 py-20 border-b border-gray-100">
+            <div className="bg-white py-20 border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-8">
                     <Link href="/" className="text-orange-600 font-bold mb-8 inline-block hover:translate-x-[-4px] transition-transform">
                         ← Kembali ke Beranda
@@ -63,7 +63,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                 {products.length === 0 ? (
                     <div className="text-center py-20 bg-gray-50 rounded-[40px] border-2 border-dashed border-gray-200">
                         <div className="text-gray-400 font-medium mb-4">Belum ada produk dalam kategori ini.</div>
-                        <Link href="/products" className="text-orange-600 font-bold hover:underline">
+                        <Link href="/produk" className="text-orange-600 font-bold hover:underline">
                             Lihat semua produk →
                         </Link>
                     </div>
@@ -71,7 +71,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
                         {products.map((product: any) => (
                             <Link
-                                href={`/products/${product.slug}`}
+                                href={`/produk/${product.slug}`}
                                 key={product.id}
                                 className="group bg-white border border-gray-100 rounded-[32px] p-8 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
                             >

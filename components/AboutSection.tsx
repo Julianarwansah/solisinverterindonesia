@@ -30,7 +30,7 @@ export default function AboutSection() {
     }, []);
 
     return (
-        <section ref={sectionRef} className="relative py-24 lg:py-0 lg:min-h-screen flex items-center bg-[#FAFAFA] overflow-hidden">
+        <section ref={sectionRef} className="relative py-24 lg:py-0 lg:min-h-screen flex items-center bg-white overflow-hidden">
             {/* Background Decorative Elements */}
             <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-40">
                 <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-orange-100/50 rounded-full blur-[120px]" />
