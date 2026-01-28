@@ -9,9 +9,9 @@ export default function Navigation() {
 
     const navLinks = [
         { href: '/', label: 'Beranda' },
+        { href: '/tentang-kami', label: 'Tentang Kami' },
         { href: '/produk', label: 'Produk' },
         { href: '/artikel', label: 'Artikel' },
-        { href: '/tentang-kami', label: 'Tentang Kami' },
     ];
 
     return (
