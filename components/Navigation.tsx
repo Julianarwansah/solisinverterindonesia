@@ -50,7 +50,7 @@ export default function Navigation() {
                     <div className="flex items-center gap-6">
 
                         <a
-                            href="https://wa.me/628123456789"
+                            href="https://wa.me/6281258885595"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-full hover:shadow-2xl transition-all hover:-translate-y-1 text-base flex items-center gap-2 group"
@@ -144,7 +144,7 @@ export default function Navigation() {
 
                             {/* Contact Button in Mobile */}
                             <a
-                                href="https://wa.me/628123456789"
+                                href="https://wa.me/6281258885595"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="block mt-4 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-xl text-center hover:shadow-lg transition-all"

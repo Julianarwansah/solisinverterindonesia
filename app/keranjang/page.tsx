@@ -25,7 +25,7 @@ export default function CartPage() {
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                         <a
-                            href="https://wa.me/628123456789"
+                            href="https://wa.me/6281258885595"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-full hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center gap-2"

@@ -97,7 +97,7 @@ export default async function ProductDetail({ params }: Props) {
                         <div className="pt-8 border-t space-y-4">
                             <h3 className="font-semibold text-lg">Tertarik dengan produk ini?</h3>
                             <a
-                                href={`https://wa.me/628123456789?text=Halo%20Solis%20Indonesia,%20saya%20ingin%20tanya%20tentang%20produk%20${encodeURIComponent(product.name)}`}
+                                href={`https://wa.me/6281258885595?text=Halo%20Solis%20Indonesia,%20saya%20ingin%20tanya%20tentang%20produk%20${encodeURIComponent(product.name)}`}
                                 className="inline-flex items-center justify-center px-8 py-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl shadow-lg transition-all hover:-translate-y-1 w-full md:w-auto"
                                 target="_blank"
                                 rel="noopener noreferrer"
