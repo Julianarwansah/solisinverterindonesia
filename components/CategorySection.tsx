@@ -10,6 +10,7 @@ interface Category {
     slug: string;
     description: string;
     image?: string;
+    thumbnail?: string | { id: string };
 }
 
 interface CategorySectionProps {
@@ -103,10 +104,15 @@ export default function CategorySection({ categories }: CategorySectionProps) {
                         className={`lg:col-span-7 relative aspect-[16/10] rounded-[40px] overflow-hidden shadow-2xl group transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
                     >
                         <Image
-                            src={activeCategory.image || "/images/about_main.png"}
+                            src={
+                                activeCategory.thumbnail
+                                    ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://localhost:8055'}/assets/${typeof activeCategory.thumbnail === 'object' ? activeCategory.thumbnail.id : activeCategory.thumbnail}`
+                                    : (activeCategory.image || "/images/about_main.png")
+                            }
                             alt={activeCategory.name}
                             fill
                             className="object-cover transition-transform duration-[2000ms] group-hover:scale-105"
+                            unoptimized
                         />
                         <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent group-hover:from-black/40 transition-all" />
 

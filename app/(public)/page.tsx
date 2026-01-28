@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 async function getCategories(): Promise<any[]> {
   try {
     const categories = await directus.request(readItems('product_categories', {
-      fields: ['*'] as any,
+      fields: ['id', 'name', 'slug', 'description', 'thumbnail'] as any,
     }));
     return categories;
   } catch (error) {

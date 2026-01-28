@@ -34,7 +34,7 @@ async function getProduct(slug: string) {
     try {
         const products = await directus.request(readItems('products', {
             filter: { slug: { _eq: slug } },
-            fields: ['*', { category: ['name'] }, { images: [{ directus_files_id: ['*'] }] }] as any,
+            fields: ['*', { category: ['name'] }, 'image', { images: [{ directus_files_id: ['*'] }] }] as any,
             limit: 1
         })) as any[];
 
@@ -51,6 +51,14 @@ export default async function ProductDetail({ params }: Props) {
 
     if (!product) notFound();
 
+    // Use the featured image if available, otherwise fallback to the first gallery image
+    const featuredImageId = product.image || product.images?.[0]?.directus_files_id?.id;
+    // If we used the featured image, we show all gallery images. 
+    // If we fell back to the first gallery image, we show the rest of the gallery.
+    const galleryImages = product.image
+        ? product.images
+        : product.images?.slice(1);
+
     return (
         <div className="min-h-screen p-8 sm:p-20">
             <main className="max-w-6xl mx-auto">
@@ -59,10 +67,10 @@ export default async function ProductDetail({ params }: Props) {
                 <div className="flex flex-col md:flex-row gap-12">
                     {/* Gallery */}
                     <div className="flex-1 space-y-4">
-                        {product.images?.[0] && (
+                        {featuredImageId && (
                             <div className="aspect-square relative rounded-2xl overflow-hidden border shadow-sm">
                                 <Image
-                                    src={`http://localhost:8055/assets/${product.images[0].directus_files_id.id}`}
+                                    src={`http://localhost:8055/assets/${featuredImageId}`}
                                     alt={product.name}
                                     fill
                                     className="object-contain p-8"
@@ -70,7 +78,7 @@ export default async function ProductDetail({ params }: Props) {
                             </div>
                         )}
                         <div className="grid grid-cols-4 gap-4">
-                            {product.images?.slice(1).map((img: any, i: number) => (
+                            {galleryImages?.map((img: any, i: number) => (
                                 <div key={i} className="aspect-square relative rounded-lg overflow-hidden border">
                                     <Image
                                         src={`http://localhost:8055/assets/${img.directus_files_id.id}`}

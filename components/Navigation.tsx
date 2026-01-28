@@ -22,14 +22,14 @@ export default function Navigation() {
                 <nav className="max-w-7xl mx-auto px-8 py-4 bg-white/90 backdrop-blur-xl border border-gray-200 rounded-full shadow-xl flex items-center justify-between">
                     {/* Logo - Left */}
                     <Link href="/" className="flex items-center gap-3">
-                        <div className="relative w-10 h-10 flex items-center justify-center">
-                            <Image
-                                src="/images/solisindonesialogo.png"
-                                alt="Solis Logo"
-                                fill
-                                className="object-contain"
-                            />
-                        </div>
+                        <Image
+                            src="/images/solislogo.png"
+                            alt="Solis Logo"
+                            width={40}
+                            height={40}
+                            className="h-10 w-10 object-contain"
+                            priority
+                        />
                         <span className="text-lg font-bold text-gray-900 tracking-tight">Solis Indonesia</span>
                     </Link>
 
@@ -66,14 +66,14 @@ export default function Navigation() {
             <nav className="md:hidden flex items-center justify-between px-6 py-4 bg-orange-50 border-b border-orange-100/50 sticky top-0 z-50">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2">
-                    <div className="relative w-9 h-9 flex items-center justify-center">
-                        <Image
-                            src="/images/solisindonesialogo.png"
-                            alt="Solis Logo"
-                            fill
-                            className="object-contain"
-                        />
-                    </div>
+                    <Image
+                        src="/images/solislogo.png"
+                        alt="Solis Logo"
+                        width={36}
+                        height={36}
+                        className="h-9 w-9 object-contain"
+                        priority
+                    />
                     <span className="text-lg font-bold text-gray-900">Solis Indonesia</span>
                 </Link>
 
@@ -109,14 +109,13 @@ export default function Navigation() {
                         {/* Header */}
                         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                             <Link href="/" className="flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
-                                <div className="relative w-9 h-9 flex items-center justify-center">
-                                    <Image
-                                        src="/images/solisindonesialogo.png"
-                                        alt="Solis Logo"
-                                        fill
-                                        className="object-contain"
-                                    />
-                                </div>
+                                <Image
+                                    src="/images/solislogo.png"
+                                    alt="Solis Logo"
+                                    width={36}
+                                    height={36}
+                                    className="h-9 w-9 object-contain"
+                                />
                                 <span className="text-lg font-bold text-gray-900">Solis Indonesia</span>
                             </Link>
                             <button
