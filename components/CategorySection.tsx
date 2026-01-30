@@ -107,7 +107,7 @@ export default function CategorySection({ categories }: CategorySectionProps) {
                             src={
                                 activeCategory.thumbnail
                                     ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://localhost:8055'}/assets/${typeof activeCategory.thumbnail === 'object' ? activeCategory.thumbnail.id : activeCategory.thumbnail}`
-                                    : (activeCategory.image || "/images/about_main.png")
+                                    : (activeCategory.image || "/images/about_main.webp")
                             }
                             alt={activeCategory.name}
                             fill

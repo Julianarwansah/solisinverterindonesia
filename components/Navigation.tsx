@@ -18,7 +18,7 @@ export default function Navigation() {
     return (
         <>
             {/* Desktop Navbar - Floating Rounded */}
-            <div className="hidden md:block sticky top-0 z-50 pt-4 pb-4 bg-orange-50/50">
+            <div className="hidden md:block sticky top-0 z-50 pt-4 pb-4">
                 <nav className="max-w-7xl mx-auto px-8 py-4 bg-white/90 backdrop-blur-xl border border-gray-200 rounded-full shadow-xl flex items-center justify-between">
                     {/* Logo - Left */}
                     <Link href="/" className="flex items-center gap-3">
@@ -63,7 +63,7 @@ export default function Navigation() {
 
 
             {/* Mobile Header */}
-            <nav className="md:hidden flex items-center justify-between px-6 py-4 bg-orange-50 border-b border-orange-100/50 sticky top-0 z-50">
+            <nav className="md:hidden flex items-center justify-between px-6 py-4 sticky top-0 z-50 bg-white/80 backdrop-blur-lg">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2">
                     <Image

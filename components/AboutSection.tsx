@@ -65,7 +65,7 @@ export default function AboutSection() {
                     <div className={`flex flex-col gap-10 transition-all duration-[1500ms] delay-500 cubic-bezier(0.2, 0.8, 0.2, 1) transform ${isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'}`}>
                         <div className="relative aspect-[16/10] lg:aspect-[16/11] rounded-[48px] overflow-hidden shadow-[0_64px_128px_-32px_rgba(0,0,0,0.15)] bg-gray-100 group">
                             <Image
-                                src="/images/about_main.png"
+                                src="/images/about_main.webp"
                                 alt="Instalasi Inverter Solis"
                                 fill
                                 className="object-cover transition-transform duration-[3000ms] group-hover:scale-105"

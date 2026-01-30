@@ -90,7 +90,7 @@ export default function AboutPage() {
                         <div className="relative">
                             <div className="aspect-[4/5] rounded-[60px] overflow-hidden shadow-2xl relative z-10">
                                 <Image
-                                    src="/images/about_main.png"
+                                    src="/images/about_main.webp"
                                     alt="Solis Factory"
                                     fill
                                     className="object-cover"

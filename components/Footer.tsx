@@ -49,13 +49,13 @@ export default function Footer() {
 
                     {/* Links */}
                     <div>
-                        <h4 className="text-white font-bold mb-6">Perusahaan</h4>
+                        <h4 className="text-white font-bold mb-6">Menu Utama</h4>
                         <ul className="space-y-4 text-sm">
+                            <li><Link href="/" className="hover:text-orange-500 transition-colors">Beranda</Link></li>
                             <li><Link href="/tentang-kami" className="hover:text-orange-500 transition-colors">Tentang Kami</Link></li>
-                            <li><Link href="/artikel" className="hover:text-orange-500 transition-colors">Berita & Artikel</Link></li>
-                            <li><Link href="/proyek" className="hover:text-orange-500 transition-colors">Proyek Referensi</Link></li>
-                            <li><Link href="/kontak" className="hover:text-orange-500 transition-colors">Hubungi Kami</Link></li>
-                            <li><Link href="/privasi" className="hover:text-orange-500 transition-colors">Kebijakan Privasi</Link></li>
+                            <li><Link href="/produk" className="hover:text-orange-500 transition-colors">Produk</Link></li>
+                            <li><Link href="/artikel" className="hover:text-orange-500 transition-colors">Artikel</Link></li>
+                            <li><Link href="/kontak" className="hover:text-orange-500 transition-colors">Kontak</Link></li>
                         </ul>
                     </div>
 

@@ -7,17 +7,16 @@ export default function Hero() {
   return (
     <section className="relative w-full pt-8 pb-32 md:pt-12 md:pb-40 overflow-hidden bg-white">
       {/* Subtle Background Decoration */}
-      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[600px] h-[600px] bg-orange-50 rounded-full blur-3xl opacity-50 pointer-events-none" />
       <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-[400px] h-[400px] bg-blue-50 rounded-full blur-3xl opacity-30 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
 
         {/* Left Side: Pill Image Gallery */}
-        <div className="lg:col-span-7 relative flex justify-center lg:justify-start gap-2 md:gap-5 h-[350px] sm:h-[450px] md:h-[650px] items-center">
+        <div className="lg:col-span-7 relative flex justify-center lg:justify-start gap-2 md:gap-5 h-[400px] sm:h-[500px] md:h-[700px] items-center">
           {/* Pill 1 */}
-          <div className="relative w-16 sm:w-24 md:w-36 h-[60%] rounded-full overflow-hidden shadow-2xl translate-y-8 md:translate-y-12 transition-transform duration-700 hover:-translate-y-2 animate-float">
+          <div className="relative w-20 sm:w-32 md:w-44 h-[60%] rounded-full overflow-hidden shadow-2xl translate-y-8 md:translate-y-12 transition-transform duration-700 hover:-translate-y-2 animate-float">
             <Image
-              src="/images/hero1.png"
+              src="/images/hero1.webp"
               alt="Modern Solar House"
               fill
               className="object-cover scale-110"
@@ -26,9 +25,9 @@ export default function Hero() {
           </div>
 
           {/* Pill 2 (Tallest) */}
-          <div className="relative w-20 sm:w-32 md:w-52 h-[90%] rounded-full border-4 md:border-[6px] border-white overflow-hidden shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] md:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] -translate-y-4 md:-translate-y-6 transition-transform duration-700 hover:-translate-y-10 animate-float-delayed">
+          <div className="relative w-24 sm:w-40 md:w-60 h-[95%] rounded-full border-4 md:border-[6px] border-white overflow-hidden shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] md:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] -translate-y-4 md:-translate-y-6 transition-transform duration-700 hover:-translate-y-10 animate-float-delayed">
             <Image
-              src="/images/hero2.png"
+              src="/images/hero2.webp"
               alt="Solis Inverter Premium"
               fill
               className="object-cover scale-105"
@@ -36,9 +35,9 @@ export default function Hero() {
           </div>
 
           {/* Pill 3 */}
-          <div className="relative w-18 sm:w-28 md:w-44 h-[70%] rounded-full overflow-hidden shadow-2xl translate-y-12 md:translate-y-16 transition-transform duration-700 hover:translate-y-10 animate-float">
+          <div className="relative w-22 sm:w-36 md:w-52 h-[70%] rounded-full overflow-hidden shadow-2xl translate-y-12 md:translate-y-16 transition-transform duration-700 hover:translate-y-10 animate-float">
             <Image
-              src="/images/hero3.png"
+              src="/images/hero3.webp"
               alt="Solar Farm"
               fill
               className="object-cover scale-110"
@@ -47,9 +46,9 @@ export default function Hero() {
           </div>
 
           {/* Pill 4 - Hidden on very small screens */}
-          <div className="hidden sm:block relative w-16 md:w-32 h-[50%] rounded-full overflow-hidden shadow-xl -translate-y-8 md:-translate-y-12 transition-transform duration-700 hover:-translate-y-16 animate-float-delayed">
+          <div className="hidden sm:block relative w-20 md:w-40 h-[50%] rounded-full overflow-hidden shadow-xl -translate-y-8 md:-translate-y-12 transition-transform duration-700 hover:-translate-y-16 animate-float-delayed">
             <Image
-              src="/images/hero4.png"
+              src="/images/hero4.webp"
               alt="Clean Energy Living"
               fill
               className="object-cover"
