@@ -51,15 +51,16 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
                 >
                     {images.length > 0 ? (
                         images.map((img, i) => (
-                            <div key={i} className="flex-shrink-0 w-full h-full snap-center relative flex items-center justify-center p-8">
+                            <div key={i} className="flex-shrink-0 w-full h-full snap-center relative flex items-center justify-center p-4 sm:p-8">
                                 <div className="relative w-full h-full">
                                     <Image
                                         src={img}
                                         alt={`${productName} view ${i + 1}`}
                                         fill
-                                        className="object-contain drop-shadow-lg"
+                                        className="object-contain drop-shadow-sm sm:drop-shadow-lg"
                                         priority={i === 0}
                                         draggable={false}
+                                        sizes="(max-width: 768px) 100vw, 50vw"
                                     />
                                 </div>
                             </div>
@@ -71,19 +72,19 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
                     )}
                 </div>
 
-                {/* Navigation Arrows (Visible on Hover) */}
+                {/* Navigation Arrows (Hidden on Mobile) */}
                 {showNav && (
                     <>
                         <button
                             onClick={() => scrollToImage(Math.max(0, activeIndex - 1))}
-                            className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white backdrop-blur-sm shadow-md rounded-full flex items-center justify-center text-gray-800 opacity-0 group-hover:opacity-100 transition-all duration-300 disabled:opacity-0 hover:scale-110"
+                            className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white backdrop-blur-sm shadow-md rounded-full items-center justify-center text-gray-800 opacity-0 group-hover:opacity-100 transition-all duration-300 disabled:opacity-0 hover:scale-110"
                             disabled={activeIndex === 0}
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" /></svg>
                         </button>
                         <button
                             onClick={() => scrollToImage(Math.min(images.length - 1, activeIndex + 1))}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white backdrop-blur-sm shadow-md rounded-full flex items-center justify-center text-gray-800 opacity-0 group-hover:opacity-100 transition-all duration-300 disabled:opacity-0 hover:scale-110"
+                            className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white backdrop-blur-sm shadow-md rounded-full items-center justify-center text-gray-800 opacity-0 group-hover:opacity-100 transition-all duration-300 disabled:opacity-0 hover:scale-110"
                             disabled={activeIndex === images.length - 1}
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" /></svg>
@@ -115,8 +116,8 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
                             key={i}
                             onClick={() => scrollToImage(i)}
                             className={`group relative w-20 aspect-square flex-shrink-0 rounded-xl overflow-hidden border-2 transition-all duration-300 ${i === activeIndex
-                                    ? 'border-orange-500 shadow-md scale-105'
-                                    : 'border-transparent hover:border-orange-200 opacity-70 hover:opacity-100 grayscale hover:grayscale-0'
+                                ? 'border-orange-500 shadow-md scale-105'
+                                : 'border-transparent hover:border-orange-200 opacity-70 hover:opacity-100 grayscale hover:grayscale-0'
                                 }`}
                         >
                             <Image

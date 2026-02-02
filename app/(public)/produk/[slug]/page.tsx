@@ -75,19 +75,19 @@ export default async function ProductDetail({ params }: Props) {
         <div className="min-h-screen bg-gray-50/50 pb-20">
             {/* Breadcrumb Header */}
             <div className="bg-white border-b border-gray-100">
-                <div className="max-w-7xl mx-auto px-6 py-4">
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+                    <div className="flex items-center gap-2 text-sm text-gray-500 overflow-x-auto whitespace-nowrap scrollbar-hide">
                         <Link href="/" className="hover:text-orange-600 transition-colors">Beranda</Link>
-                        <svg className="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                        <svg className="w-4 h-4 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                         <Link href="/produk" className="hover:text-orange-600 transition-colors">Produk</Link>
-                        <svg className="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                        <svg className="w-4 h-4 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                         <span className="text-gray-900 font-medium truncate">{product.name}</span>
                     </div>
                 </div>
             </div>
 
-            <main className="max-w-7xl mx-auto px-6 py-12">
-                <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-12">
+                <div className="grid lg:grid-cols-2 gap-8 lg:gap-20">
 
                     {/* Left Column: Gallery */}
                     <ProductGallery images={images} productName={product.name} />
@@ -103,7 +103,7 @@ export default async function ProductDetail({ params }: Props) {
                                     {product.category.name}
                                 </Link>
                             )}
-                            <h1 className="text-4xl lg:text-5xl font-[900] text-gray-900 tracking-tight leading-[1.1] mb-6">
+                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-[900] text-gray-900 tracking-tight leading-[1.1] mb-6">
                                 {product.name}
                             </h1>
                             <div className="flex items-center gap-4 text-sm text-gray-500">
