@@ -111,6 +111,7 @@ export default function CategorySection({ categories }: CategorySectionProps) {
                             }
                             alt={activeCategory.name}
                             fill
+                            sizes="(max-width: 1024px) 100vw, 60vw"
                             className="object-cover transition-transform duration-[2000ms] group-hover:scale-105"
                             unoptimized
                         />

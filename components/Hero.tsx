@@ -19,6 +19,8 @@ export default function Hero() {
               src="/images/hero1.webp"
               alt="Modern Solar House"
               fill
+              sizes="(max-width: 640px) 5rem, (max-width: 768px) 8rem, 11rem"
+              priority
               className="object-cover scale-110"
             />
             <div className="absolute inset-0 bg-black/5" />
@@ -30,6 +32,8 @@ export default function Hero() {
               src="/images/hero2.webp"
               alt="Solis Inverter Premium"
               fill
+              sizes="(max-width: 640px) 6rem, (max-width: 768px) 10rem, 15rem"
+              priority
               className="object-cover scale-105"
             />
           </div>
@@ -40,6 +44,7 @@ export default function Hero() {
               src="/images/hero3.webp"
               alt="Solar Farm"
               fill
+              sizes="(max-width: 640px) 5.5rem, (max-width: 768px) 9rem, 13rem"
               className="object-cover scale-110"
             />
             <div className="absolute inset-0 bg-black/5" />
@@ -51,6 +56,7 @@ export default function Hero() {
               src="/images/hero4.webp"
               alt="Clean Energy Living"
               fill
+              sizes="(max-width: 768px) 5rem, 10rem"
               className="object-cover"
             />
           </div>

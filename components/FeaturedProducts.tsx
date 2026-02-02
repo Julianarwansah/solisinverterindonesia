@@ -106,6 +106,7 @@ export default async function FeaturedProducts() {
                                         src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055'}/assets/${typeof product.image === 'string' ? product.image : product.image.id}?format=webp&quality=80`}
                                         alt={product.name}
                                         fill
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                         className="object-contain p-6 transition-transform duration-700 group-hover:scale-110"
                                     />
                                 ) : product.images && product.images.length > 0 && product.images[0]?.directus_files_id ? (
@@ -113,6 +114,7 @@ export default async function FeaturedProducts() {
                                         src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055'}/assets/${product.images[0].directus_files_id.id}?format=webp&quality=80`}
                                         alt={product.name}
                                         fill
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                         className="object-contain p-6 transition-transform duration-700 group-hover:scale-110"
                                     />
                                 ) : (
