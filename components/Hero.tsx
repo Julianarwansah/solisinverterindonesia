@@ -1,4 +1,4 @@
-'use client';
+
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -123,19 +123,6 @@ export default function Hero() {
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(var(--tw-translate-y)); }
-          50% { transform: translateY(calc(var(--tw-translate-y) - 20px)); }
-        }
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-        .animate-float-delayed {
-          animation: float 6s ease-in-out infinite;
-          animation-delay: 2s;
-        }
-      `}</style>
     </section>
   );
 }

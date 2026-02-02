@@ -64,11 +64,13 @@ const jsonLd = {
 };
 
 import Hero from '@/components/Hero';
-import AboutSection from '@/components/AboutSection';
-import CategorySection from '@/components/CategorySection';
-import FeaturesBento from '@/components/FeaturesBento';
-import FeaturedProducts from '@/components/FeaturedProducts';
-import ContactSection from '@/components/ContactSection';
+import dynamic from 'next/dynamic';
+
+const AboutSection = dynamic(() => import('@/components/AboutSection'));
+const CategorySection = dynamic(() => import('@/components/CategorySection'));
+const FeaturesBento = dynamic(() => import('@/components/FeaturesBento'));
+const FeaturedProducts = dynamic(() => import('@/components/FeaturedProducts'));
+const ContactSection = dynamic(() => import('@/components/ContactSection'));
 
 export default async function Home() {
   const categories = await getCategories();
