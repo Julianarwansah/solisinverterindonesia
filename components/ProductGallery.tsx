@@ -38,7 +38,7 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
     const showNav = images.length > 1;
 
     return (
-        <div className="space-y-6 select-none bg-white p-4 rounded-[2rem] border border-gray-100 shadow-xl shadow-gray-100/50">
+        <div className="space-y-6 select-none bg-white p-3 sm:p-4 rounded-[1.5rem] sm:rounded-[2rem] border border-gray-100 shadow-xl shadow-gray-100/50 w-full max-w-full overflow-hidden">
             {/* Main Carousel Area */}
             <div className="relative group rounded-2xl overflow-hidden bg-gray-50 aspect-square">
 
