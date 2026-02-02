@@ -9,9 +9,9 @@ async function run() {
             database: 'db_solis'
         });
 
-        const [migrations] = await conn.execute('SELECT * FROM directus_migrations ORDER BY timestamp DESC LIMIT 5');
-        console.log('--- directus_migrations entries ---');
-        console.log(JSON.stringify(migrations, null, 2));
+        const [settings] = await conn.execute('DESCRIBE directus_settings');
+        console.log('--- directus_settings columns ---');
+        console.log(JSON.stringify(settings.map(s => s.Field), null, 2));
 
         await conn.end();
     } catch (e) {
