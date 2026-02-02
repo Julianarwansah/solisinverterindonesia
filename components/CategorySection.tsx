@@ -106,7 +106,7 @@ export default function CategorySection({ categories }: CategorySectionProps) {
                         <Image
                             src={
                                 activeCategory.thumbnail
-                                    ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://localhost:8055'}/assets/${typeof activeCategory.thumbnail === 'object' ? activeCategory.thumbnail.id : activeCategory.thumbnail}`
+                                    ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055'}/assets/${typeof activeCategory.thumbnail === 'object' ? activeCategory.thumbnail.id : activeCategory.thumbnail}?format=webp&quality=80`
                                     : (activeCategory.image || "/images/about_main.webp")
                             }
                             alt={activeCategory.name}

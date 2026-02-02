@@ -6,13 +6,12 @@ import Link from 'next/link';
 async function getFeaturedProducts() {
     try {
         const products = await directus.request(readItems('products', {
-            fields: ['*', { images: ['*', { directus_files_id: ['*'] }] }] as any,
+            fields: ['id', 'name', 'slug', 'description', 'image', 'tags', { category: ['name'] }] as any,
             limit: 6,
-            sort: ['-date_created'] as any, // Sort by date created desc
         }));
         return products as any[];
-    } catch (error) {
-        console.error('Error fetching featured products:', error);
+    } catch (error: any) {
+        console.error('Error fetching featured products:', JSON.stringify(error, null, 2));
         return [];
     }
 }
@@ -102,9 +101,16 @@ export default async function FeaturedProducts() {
                         >
                             {/* Image Container */}
                             <div className="aspect-[4/3] relative mb-6 rounded-2xl overflow-hidden bg-slate-50 group-hover:bg-orange-50/50 transition-colors">
-                                {product.images && product.images.length > 0 && product.images[0]?.directus_files_id ? (
+                                {product.image ? (
                                     <Image
-                                        src={`http://localhost:8055/assets/${product.images[0].directus_files_id.id}`}
+                                        src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055'}/assets/${typeof product.image === 'string' ? product.image : product.image.id}?format=webp&quality=80`}
+                                        alt={product.name}
+                                        fill
+                                        className="object-contain p-6 transition-transform duration-700 group-hover:scale-110"
+                                    />
+                                ) : product.images && product.images.length > 0 && product.images[0]?.directus_files_id ? (
+                                    <Image
+                                        src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055'}/assets/${product.images[0].directus_files_id.id}?format=webp&quality=80`}
                                         alt={product.name}
                                         fill
                                         className="object-contain p-6 transition-transform duration-700 group-hover:scale-110"

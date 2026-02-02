@@ -12,12 +12,11 @@ export const metadata: Metadata = {
 async function getArticles(): Promise<Article[]> {
     try {
         const articles = await directus.request(readItems('articles', {
-            fields: ['*', { featured_image: ['*'] }] as any,
-            sort: ['-date_created' as any],
+            fields: ['id', 'title', 'slug', 'excerpt', 'featured_image', 'tags'] as any,
         })) as any[];
         return articles;
     } catch (error) {
-        console.error('Error fetching articles:', error);
+        console.error('Error fetching articles:', JSON.stringify(error, null, 2));
         return [];
     }
 }
@@ -78,7 +77,7 @@ export default async function ArticlesPage() {
                                         <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
                                             <div className="lg:col-span-7 aspect-[16/10] relative overflow-hidden">
                                                 <Image
-                                                    src={`http://localhost:8055/assets/${typeof featuredArticle.featured_image === 'object' ? featuredArticle.featured_image.id : featuredArticle.featured_image}`}
+                                                    src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055'}/assets/${typeof featuredArticle.featured_image === 'object' ? featuredArticle.featured_image.id : featuredArticle.featured_image}?format=webp&quality=80`}
                                                     alt={featuredArticle.title}
                                                     fill
                                                     className="object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80 group-hover:opacity-100"
@@ -125,7 +124,7 @@ export default async function ArticlesPage() {
                                             <Link key={article.id} href={`/artikel/${article.slug}`} className="group flex flex-col h-full bg-white rounded-[40px] border border-gray-100/50 p-4 hover:border-orange-200 hover:shadow-2xl hover:shadow-orange-500/5 transition-all duration-500">
                                                 <div className="aspect-[16/10] relative mb-8 rounded-[32px] overflow-hidden">
                                                     <Image
-                                                        src={`http://localhost:8055/assets/${typeof article.featured_image === 'object' ? article.featured_image.id : article.featured_image}`}
+                                                        src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055'}/assets/${typeof article.featured_image === 'object' ? article.featured_image.id : article.featured_image}?format=webp&quality=80`}
                                                         alt={article.title}
                                                         fill
                                                         className="object-cover transition-transform duration-700 group-hover:scale-110"

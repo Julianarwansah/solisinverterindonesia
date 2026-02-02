@@ -34,7 +34,7 @@ async function getProduct(slug: string) {
     try {
         const products = await directus.request(readItems('products', {
             filter: { slug: { _eq: slug } },
-            fields: ['*', { category: ['name'] }, 'image', { images: [{ directus_files_id: ['*'] }] }] as any,
+            fields: ['id', 'name', 'slug', 'description', 'image', 'tags', 'meta_title', 'meta_description', { category: ['name'] }] as any,
             limit: 1
         })) as any[];
 
@@ -70,7 +70,7 @@ export default async function ProductDetail({ params }: Props) {
                         {featuredImageId && (
                             <div className="aspect-square relative rounded-2xl overflow-hidden border shadow-sm">
                                 <Image
-                                    src={`http://localhost:8055/assets/${featuredImageId}`}
+                                    src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055'}/assets/${featuredImageId}?format=webp&quality=80`}
                                     alt={product.name}
                                     fill
                                     className="object-contain p-8"
@@ -81,7 +81,7 @@ export default async function ProductDetail({ params }: Props) {
                             {galleryImages?.map((img: any, i: number) => (
                                 <div key={i} className="aspect-square relative rounded-lg overflow-hidden border">
                                     <Image
-                                        src={`http://localhost:8055/assets/${img.directus_files_id.id}`}
+                                        src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055'}/assets/${img.directus_files_id.id}?format=webp&quality=80`}
                                         alt={`${product.name} alternate`}
                                         fill
                                         className="object-cover"

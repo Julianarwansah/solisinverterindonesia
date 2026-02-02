@@ -62,12 +62,12 @@ interface Schema {
     directus_files: DirectusFile[];
 }
 
-const directus = createDirectus<Schema>(process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://localhost:8055')
+const directus = createDirectus<Schema>(process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055')
     .with(staticToken(process.env.DIRECTUS_TOKEN || ''))
     .with(rest());
 
 export const getAuthenticatedClient = (token: string) => {
-    return createDirectus<Schema>(process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://localhost:8055')
+    return createDirectus<Schema>(process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055')
         .with(staticToken(token))
         .with(rest());
 };
