@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import CategorySidebar from '@/components/CategorySidebar';
 import Pagination from '@/components/Pagination';
+import SortDropdown from '@/components/SortDropdown';
+import MobileCategoryFilter from '@/components/MobileCategoryFilter';
 
 async function getCategories() {
     try {
@@ -119,7 +121,7 @@ export default async function CategoryPage({
     ]);
 
     return (
-        <div className="min-h-screen bg-white relative">
+        <div className="min-h-screen bg-white relative overflow-x-hidden">
             {/* Page Hero Section */}
             <section className="relative pt-12 pb-20 overflow-hidden z-10 bg-orange-50/50">
                 {/* Background Decor */}
@@ -146,61 +148,38 @@ export default async function CategoryPage({
                             <span className="text-orange-600 font-black">{category.name}</span>
                         </div>
 
-                        <h1 className="text-5xl md:text-7xl font-[1000] text-gray-900 tracking-tight leading-[1.1] mb-8 capitalize">
+                        <h1 className="text-4xl sm:text-5xl md:text-7xl font-[1000] text-gray-900 tracking-tight leading-[1.1] mb-8 capitalize">
                             {category.name}
                         </h1>
 
-                        <p className="text-lg md:text-xl text-gray-500 font-medium leading-relaxed">
+                        <p className="text-base md:text-xl text-gray-500 font-medium leading-relaxed">
                             {category.description || `Menampilkan koleksi produk terbaik kami dalam kategori ${category.name}.`}
                         </p>
                     </div>
 
-                    {/* Mobile Category Filter - Horizontal Scroll */}
-                    <div className="lg:hidden mt-12 -mx-2 overflow-x-auto no-scrollbar pb-2">
-                        <div className="flex items-center gap-3 px-2 min-w-max">
-                            <Link href="/produk" className="px-6 py-3 rounded-2xl bg-white border border-gray-100 text-sm font-bold text-gray-600">
-                                Katalog
-                            </Link>
-                            {allCategories
-                                .filter(cat => !cat.parent_category)
-                                .map((cat: any) => (
-                                    <div key={cat.id} className="flex flex-col gap-2">
-                                        <Link
-                                            href={`/produk/kategori/${cat.slug}`}
-                                            className={`px-6 py-3 rounded-2xl text-sm font-black transition-all ${cat.slug === slug
-                                                ? 'bg-gray-950 text-white shadow-xl shadow-gray-950/10'
-                                                : 'bg-white border border-gray-100 text-gray-600 hover:border-orange-200 hover:text-orange-600'
-                                                }`}
-                                        >
-                                            {cat.name}
-                                        </Link>
-
-                                        {/* Show children if this is the active parent or if it has subcategories */}
-                                        {(cat.slug === slug || allCategories.some(sub => sub.parent_category === cat.id && sub.slug === slug)) && (
-                                            <div className="flex flex-wrap gap-2 pl-4">
-                                                {allCategories
-                                                    .filter(sub => sub.parent_category === cat.id)
-                                                    .map((sub: any) => (
-                                                        <Link
-                                                            key={sub.id}
-                                                            href={`/produk/kategori/${sub.slug}`}
-                                                            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${sub.slug === slug
-                                                                ? 'bg-orange-600 text-white'
-                                                                : 'bg-orange-50 text-orange-700 hover:bg-orange-100'
-                                                                }`}
-                                                        >
-                                                            {sub.name}
-                                                        </Link>
-                                                    ))
-                                                }
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                        </div>
-                    </div>
                 </div>
             </section>
+
+            {/* Catalog Header Section - Static Position (Normal Scroll) */}
+            <div className="bg-white border-b border-gray-100 shadow-sm transition-all duration-300 relative z-20">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-5">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                        <div className="flex items-center gap-4">
+                            <div className="w-1.5 h-10 bg-orange-500 rounded-full" />
+                            <div>
+                                <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] mb-0.5">Katalog Produk</p>
+                                <p className="text-gray-900 text-lg md:text-xl font-[1000] tracking-tight">Menampilkan {products.length} pilihan terbaik</p>
+                            </div>
+                        </div>
+
+                        {/* Sort UI */}
+                        <SortDropdown />
+                    </div>
+
+                    {/* Mobile Category Filter - Collapsible */}
+                    <MobileCategoryFilter categories={allCategories} currentSlug={slug} totalProducts={totalProducts} />
+                </div>
+            </div>
 
             {/* Breadcrumb for subcategories */}
             {category.parent_category && (
@@ -304,7 +283,7 @@ export default async function CategoryPage({
                                                             <span className="w-6 h-[1.5px] bg-orange-500/40" />
                                                             <span className="text-[10px] font-[1000] uppercase tracking-[0.2em] text-orange-500">Premium Series</span>
                                                         </div>
-                                                        <Link href={`/produk/${product.slug}`} className="text-2xl font-[1000] text-gray-900 group-hover:text-orange-600 transition-colors line-clamp-1 block mb-3 tracking-tight leading-tight">
+                                                        <Link href={`/produk/${product.slug}`} className="text-xl sm:text-2xl font-[1000] text-gray-900 group-hover:text-orange-600 transition-colors line-clamp-1 block mb-3 tracking-tight leading-tight">
                                                             {product.name}
                                                         </Link>
                                                         <div

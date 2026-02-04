@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import CategorySidebar from '@/components/CategorySidebar';
 import Pagination from '@/components/Pagination';
+import SortDropdown from '@/components/SortDropdown';
+import MobileCategoryFilter from '@/components/MobileCategoryFilter';
 
 export const metadata: Metadata = {
     title: 'Katalog Produk Solis Inverter | Semua Tipe',
@@ -73,9 +75,9 @@ export default async function ProductsPage({
     ];
 
     return (
-        <main className="bg-white min-h-screen">
+        <main className="bg-white min-h-screen overflow-x-hidden">
             {/* Page Hero Section */}
-            <section className="pt-12 pb-16 bg-orange-50/50">
+            <section className="relative pt-12 pb-16 bg-orange-50/50 overflow-hidden">
                 {/* Background Decor */}
                 <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-orange-200/5 rounded-full blur-[120px] animate-pulse" />
                 <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-orange-100/10 rounded-full blur-[100px]" />
@@ -100,11 +102,11 @@ export default async function ProductsPage({
                             <span className="text-orange-600">Produk</span>
                         </div>
 
-                        <h1 className="text-5xl md:text-7xl font-[1000] text-gray-900 tracking-tight leading-[1.1] mb-8">
+                        <h1 className="text-4xl sm:text-5xl md:text-7xl font-[1000] text-gray-900 tracking-tight leading-[1.1] mb-8">
                             Katalog <span className="text-orange-500 underline decoration-orange-200 underline-offset-8">Produk</span>
                         </h1>
 
-                        <p className="text-lg md:text-xl text-gray-500 font-medium leading-relaxed">
+                        <p className="text-base md:text-xl text-gray-500 font-medium leading-relaxed">
                             Temukan solusi inverter terbaik untuk kebutuhan energi Anda. Kami menyediakan berbagai pilihan untuk sistem residensial, komersial, hingga skala industri.
                         </p>
                     </div>
@@ -114,46 +116,21 @@ export default async function ProductsPage({
             {/* Catalog Header Section - Static Position (Normal Scroll) */}
             <div className="bg-white border-b border-gray-100 shadow-sm transition-all duration-300">
                 <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-5">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                         <div className="flex items-center gap-4">
                             <div className="w-1.5 h-10 bg-orange-500 rounded-full" />
                             <div>
                                 <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] mb-0.5">Katalog Produk</p>
-                                <p className="text-gray-900 text-xl font-[1000] tracking-tight">Menampilkan {products.length} pilihan terbaik</p>
+                                <p className="text-gray-900 text-lg md:text-xl font-[1000] tracking-tight">Menampilkan {products.length} pilihan terbaik</p>
                             </div>
                         </div>
 
                         {/* Sort UI */}
-                        <div className="flex items-center gap-4">
-                            <span className="text-xs font-black text-gray-400 uppercase tracking-widest hidden sm:block">Urutkan:</span>
-                            <div className="group relative">
-                                <div className="px-6 py-3 bg-white border border-gray-100 rounded-2xl text-sm font-bold text-gray-900 cursor-pointer group-hover:border-orange-500 transition-all flex items-center gap-4 shadow-sm group-hover:shadow-orange-500/5">
-                                    Produk Terbaru
-                                    <svg className="w-4 h-4 text-orange-500 group-hover:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
+                        <SortDropdown />
                     </div>
 
-                    {/* Mobile Category Filter - Horizontal Scroll */}
-                    <div className="lg:hidden mt-8 -mx-2 overflow-x-auto no-scrollbar pb-2">
-                        <div className="flex items-center gap-3 px-2 min-w-max">
-                            <Link href="/produk" className="px-6 py-3 rounded-2xl bg-gray-950 text-white text-sm font-black shadow-xl shadow-gray-950/10">
-                                Semua Produk
-                            </Link>
-                            {displayCategories.map((cat: any) => (
-                                <Link
-                                    key={cat.id || cat.slug}
-                                    href={`/produk/kategori/${cat.slug}`}
-                                    className="px-6 py-3 rounded-2xl bg-white border border-gray-100 text-sm font-bold text-gray-600 whitespace-nowrap hover:border-orange-200 hover:text-orange-600 transition-all"
-                                >
-                                    {cat.name}
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
+                    {/* Mobile Category Filter - Collapsible */}
+                    <MobileCategoryFilter categories={displayCategories} totalProducts={totalProductsCount} />
                 </div>
             </div>
             {/* Content Area - Restored normal padding */}
@@ -246,7 +223,7 @@ export default async function ProductsPage({
                                                     <span className="w-6 h-[1.5px] bg-orange-500/40" />
                                                     <span className="text-[10px] font-[1000] uppercase tracking-[0.2em] text-orange-500">Premium Series</span>
                                                 </div>
-                                                <Link href={`/produk/${product.slug}`} className="text-2xl font-[1000] text-gray-900 group-hover:text-orange-600 transition-colors line-clamp-1 block mb-3 tracking-tight leading-tight">
+                                                <Link href={`/produk/${product.slug}`} className="text-xl sm:text-2xl font-[1000] text-gray-900 group-hover:text-orange-600 transition-colors line-clamp-1 block mb-3 tracking-tight leading-tight">
                                                     {product.name}
                                                 </Link>
                                                 <p className="text-gray-500 text-sm line-clamp-2 leading-relaxed font-medium">
