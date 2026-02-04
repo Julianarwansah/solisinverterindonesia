@@ -72,14 +72,14 @@ export default function ContactSection() {
                             <p className="text-sm font-semibold text-white mt-1">+62 812-5888-5595</p>
                         </a>
 
-                        <a href="mailto:support@solisinverter.id" className="group p-4 bg-slate-900 rounded-2xl border border-slate-800 hover:border-orange-500/50 transition-colors">
+                        <a href="mailto:jarwinnofficial@gmail.com" className="group p-4 bg-slate-900 rounded-2xl border border-slate-800 hover:border-orange-500/50 transition-colors">
                             <div className="w-10 h-10 mx-auto bg-slate-800 rounded-full flex items-center justify-center mb-3 group-hover:bg-orange-600 group-hover:text-white text-slate-400 transition-colors">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                 </svg>
                             </div>
                             <p className="text-xs font-bold text-slate-500 uppercase">Email</p>
-                            <p className="text-sm font-semibold text-white mt-1">support@solisinverter.id</p>
+                            <p className="text-sm font-semibold text-white mt-1">jarwinnofficial@gmail.com</p>
                         </a>
 
                         <a href="https://wa.me/6281258885595" className="group p-4 bg-slate-900 rounded-2xl border border-slate-800 hover:border-green-500/50 transition-colors">

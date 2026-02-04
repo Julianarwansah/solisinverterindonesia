@@ -12,7 +12,7 @@ export default function Footer() {
                         <Link href="/" className="flex items-center gap-3">
                             <div className="relative w-12 h-12">
                                 <Image
-                                    src="/images/solisindonesialogo.png"
+                                    src="/images/solislogo.png"
                                     alt="Solis Indonesia Logo"
                                     fill
                                     className="object-contain"

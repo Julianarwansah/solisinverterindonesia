@@ -45,9 +45,9 @@ export default async function ProductsPage() {
     ];
 
     return (
-        <main className="bg-white min-h-screen relative">
+        <main className="bg-white min-h-screen">
             {/* Page Hero Section */}
-            <section className="relative pt-12 pb-16 overflow-hidden z-10 bg-orange-50/50">
+            <section className="pt-12 pb-16 bg-orange-50/50">
                 {/* Background Decor */}
                 <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-orange-200/5 rounded-full blur-[120px] animate-pulse" />
                 <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-orange-100/10 rounded-full blur-[100px]" />
@@ -83,7 +83,8 @@ export default async function ProductsPage() {
                 </div>
             </section>
 
-            <div className="sticky top-20 z-30 backdrop-blur-xl bg-white/80 border-b border-gray-100 shadow-sm">
+            {/* Catalog Header Section - Static Position (Normal Scroll) */}
+            <div className="bg-white border-b border-gray-100 shadow-sm transition-all duration-300">
                 <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-5">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                         <div className="flex items-center gap-4">
@@ -127,13 +128,13 @@ export default async function ProductsPage() {
                     </div>
                 </div>
             </div>
-
-            <div className="relative z-10 bg-white w-full">
+            {/* Content Area - Restored normal padding */}
+            <div className="bg-white w-full">
                 <div className="max-w-[1440px] mx-auto px-6 md:px-12 pt-6 pb-12">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
                         {/* Sidebar - Desktop */}
-                        <aside className="hidden lg:block lg:col-span-3 space-y-12">
+                        <aside className="hidden lg:block lg:col-span-3 space-y-12 h-fit">
                             {/* Categories List */}
                             <div className="bg-gray-50/50 rounded-[40px] p-8 border border-gray-100/50">
                                 <h3 className="text-xs font-[1000] text-gray-900 uppercase tracking-[0.2em] mb-8 flex items-center gap-3">
