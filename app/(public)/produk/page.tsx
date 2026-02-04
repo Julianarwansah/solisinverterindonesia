@@ -3,6 +3,7 @@ import { readItems } from '@directus/sdk';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import CategorySidebar from '@/components/CategorySidebar';
 
 export const metadata: Metadata = {
     title: 'Katalog Produk Solis Inverter | Semua Tipe',
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 async function getCategories(): Promise<any[]> {
     try {
         const categories = await directus.request(readItems('product_categories', {
-            fields: ['*'] as any,
+            fields: ['id', 'name', 'slug', 'parent_category'] as any,
         }));
         return categories;
     } catch (error) {
@@ -141,24 +142,10 @@ export default async function ProductsPage() {
                                     <span className="w-8 h-[2px] bg-orange-500/30" />
                                     Kategori
                                 </h3>
-                                <div className="space-y-3">
-                                    <Link href="/produk" className="flex items-center justify-between group px-5 py-4 rounded-2xl bg-gray-950 text-white shadow-2xl shadow-gray-950/20 font-black transition-all hover:-translate-y-1">
-                                        <span className="text-sm">Semua Produk</span>
-                                        <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">{products.length}</span>
-                                    </Link>
-                                    {displayCategories.map((cat: any) => (
-                                        <Link
-                                            key={cat.id || cat.slug}
-                                            href={`/produk/kategori/${cat.slug}`}
-                                            className="flex items-center justify-between group px-5 py-4 rounded-2xl text-gray-600 hover:text-orange-600 bg-white hover:shadow-xl hover:shadow-orange-500/5 border border-transparent hover:border-orange-100 transition-all font-bold hover:-translate-y-1"
-                                        >
-                                            <span className="text-sm">{cat.name}</span>
-                                            <svg className="w-4 h-4 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-                                            </svg>
-                                        </Link>
-                                    ))}
-                                </div>
+                                <CategorySidebar
+                                    categories={displayCategories}
+                                    totalProducts={products.length}
+                                />
                             </div>
 
                             {/* Premium Help Card */}
