@@ -18,11 +18,20 @@ interface CategorySidebarProps {
 
 export default function CategorySidebar({ categories, totalProducts, currentSlug }: CategorySidebarProps) {
     const [openCategories, setOpenCategories] = useState<Record<string, boolean>>(() => {
-        // Automatically open the parent of the current category if any
         const initialState: Record<string, boolean> = {};
-        const currentCat = categories.find(c => c.slug === currentSlug);
-        if (currentCat?.parent_category) {
-            initialState[currentCat.parent_category.toString()] = true;
+
+        // Helper to find all parents of the current slug
+        const expandPath = (slug: string) => {
+            let current = categories.find(c => c.slug === slug);
+            while (current && current.parent_category) {
+                const parentId = current.parent_category.toString();
+                initialState[parentId] = true;
+                current = categories.find(c => c.id.toString() === parentId);
+            }
+        };
+
+        if (currentSlug) {
+            expandPath(currentSlug);
         }
         return initialState;
     });
@@ -34,7 +43,7 @@ export default function CategorySidebar({ categories, totalProducts, currentSlug
         }));
     };
 
-    const parentCategories = categories.filter(cat => !cat.parent_category);
+    const rootCategories = categories.filter(cat => !cat.parent_category);
 
     return (
         <div className="space-y-4">
@@ -51,64 +60,82 @@ export default function CategorySidebar({ categories, totalProducts, currentSlug
                 </span>
             </Link>
 
-            {parentCategories.map((parent) => {
-                const subCategories = categories.filter(sub => sub.parent_category === parent.id);
-                const isExpanded = openCategories[parent.id.toString()];
-                const isActive = parent.slug === currentSlug || subCategories.some(s => s.slug === currentSlug);
+            {rootCategories.map((cat) => (
+                <CategoryNode
+                    key={cat.id}
+                    category={cat}
+                    allCategories={categories}
+                    currentSlug={currentSlug}
+                    openCategories={openCategories}
+                    toggleCategory={toggleCategory}
+                    level={0}
+                />
+            ))}
+        </div>
+    );
+}
 
-                return (
-                    <div key={parent.id} className="space-y-2">
-                        <div className="relative group">
-                            <Link
-                                href={`/produk/kategori/${parent.slug}`}
-                                className={`flex items-center justify-between px-5 py-4 rounded-2xl border transition-all font-black pr-12 ${parent.slug === currentSlug
-                                        ? 'bg-orange-50/50 border-orange-200 text-orange-600'
-                                        : 'bg-white border-gray-100 hover:border-orange-200 text-gray-900'
-                                    }`}
-                            >
-                                <span className="text-sm">{parent.name}</span>
-                            </Link>
+function CategoryNode({ category, allCategories, currentSlug, openCategories, toggleCategory, level }: any) {
+    const subCategories = allCategories.filter((sub: any) => sub.parent_category?.toString() === category.id.toString());
+    const isExpanded = openCategories[category.id.toString()];
+    const isActive = category.slug === currentSlug;
 
-                            {/* Accordion Toggle Trigger */}
-                            {subCategories.length > 0 && (
-                                <button
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        toggleCategory(parent.id);
-                                    }}
-                                    className={`absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-xl transition-all ${isExpanded ? 'bg-orange-500 text-white rotate-180' : 'text-gray-400 hover:bg-gray-100'
-                                        }`}
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </button>
-                            )}
-                        </div>
+    // Check if any descendant is active
+    const hasActiveDescendant = (cat: any): boolean => {
+        const children = allCategories.filter((sub: any) => sub.parent_category?.toString() === cat.id.toString());
+        return children.some((child: any) => child.slug === currentSlug || hasActiveDescendant(child));
+    };
 
-                        {/* Sub-categories items with smooth expansion */}
-                        {subCategories.length > 0 && (
-                            <div className={`pl-6 space-y-1 border-l-2 border-orange-100/50 ml-4 overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-[500px] opacity-100 py-1' : 'max-h-0 opacity-0 py-0'}`}>
-                                {subCategories.map((sub) => (
-                                    <Link
-                                        key={sub.id}
-                                        href={`/produk/kategori/${sub.slug}`}
-                                        className={`flex items-center justify-between group px-4 py-2.5 rounded-xl transition-all font-bold ${sub.slug === currentSlug
-                                                ? 'bg-orange-50 text-orange-600'
-                                                : 'text-gray-500 hover:text-orange-600 hover:bg-orange-50/30'
-                                            }`}
-                                    >
-                                        <span className="text-[13px]">{sub.name}</span>
-                                        <svg className={`w-3.5 h-3.5 transition-all text-orange-400 ${sub.slug === currentSlug ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-                                        </svg>
-                                    </Link>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                );
-            })}
+    const isParentActive = hasActiveDescendant(category);
+
+    return (
+        <div className="space-y-2">
+            <div className="relative group">
+                <Link
+                    href={`/produk/kategori/${category.slug}`}
+                    className={`flex items-center justify-between px-5 py-4 rounded-2xl border transition-all font-black pr-12 ${isActive
+                            ? 'bg-orange-600 border-orange-600 text-white shadow-xl shadow-orange-500/20'
+                            : isParentActive
+                                ? 'bg-orange-50/50 border-orange-200 text-orange-600'
+                                : 'bg-white border-gray-100 hover:border-orange-200 text-gray-900'
+                        }`}
+                >
+                    <span className={level > 0 ? 'text-[13px]' : 'text-sm'}>{category.name}</span>
+                </Link>
+
+                {subCategories.length > 0 && (
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            toggleCategory(category.id);
+                        }}
+                        className={`absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-xl transition-all ${isExpanded
+                                ? (isActive ? 'bg-white/20 text-white rotate-180' : 'bg-orange-500 text-white rotate-180')
+                                : (isActive ? 'text-white/60 hover:bg-white/10' : 'text-gray-400 hover:bg-gray-100')
+                            }`}
+                    >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                )}
+            </div>
+
+            {subCategories.length > 0 && (
+                <div className={`space-y-1 overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-[1000px] opacity-100 py-1' : 'max-h-0 opacity-0 py-0'}`} style={{ paddingLeft: '1.25rem', borderLeft: '2px solid rgba(249, 115, 22, 0.1)', marginLeft: '1rem' }}>
+                    {subCategories.map((sub: any) => (
+                        <CategoryNode
+                            key={sub.id}
+                            category={sub}
+                            allCategories={allCategories}
+                            currentSlug={currentSlug}
+                            openCategories={openCategories}
+                            toggleCategory={toggleCategory}
+                            level={level + 1}
+                        />
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
