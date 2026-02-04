@@ -115,9 +115,8 @@ export default async function ProductDetail({ params }: Props) {
                         </div>
 
                         {/* Description */}
-                        <div className="prose prose-lg prose-gray max-w-none prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-600 prose-p:leading-relaxed">
-                            <div dangerouslySetInnerHTML={{ __html: product.description }} />
-                        </div>
+                        {/* Description */}
+                        <ProductDescription content={product.description} />
 
                         {/* Actions */}
                         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-xl shadow-gray-100/50 space-y-6">
@@ -159,3 +158,4 @@ export default async function ProductDetail({ params }: Props) {
 
 // Re-export the client component to be safe, though not strictly needed in all setups
 import ProductGallery from '@/components/ProductGallery';
+import ProductDescription from '@/components/ProductDescription';

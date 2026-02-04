@@ -1,9 +1,10 @@
 import directus from '@/lib/directus';
-import { readItems } from '@directus/sdk';
+import { readItems, aggregate } from '@directus/sdk';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import CategorySidebar from '@/components/CategorySidebar';
+import Pagination from '@/components/Pagination';
 
 export const metadata: Metadata = {
     title: 'Katalog Produk Solis Inverter | Semua Tipe',
@@ -22,10 +23,13 @@ async function getCategories(): Promise<any[]> {
     }
 }
 
-async function getProducts() {
+async function getProducts(page: number = 1, limit: number = 12) {
     try {
+        const offset = (page - 1) * limit;
         const products = await directus.request(readItems('products', {
             fields: ['id', 'name', 'slug', 'description', 'image', 'tags', { category: ['name'] }] as any,
+            limit,
+            offset,
         }));
         return products as any[];
     } catch (error: any) {
@@ -34,9 +38,32 @@ async function getProducts() {
     }
 }
 
-export default async function ProductsPage() {
-    const products = await getProducts();
-    const categories = await getCategories();
+async function getTotalProductsCount() {
+    try {
+        const result = await directus.request(aggregate('products', {
+            aggregate: { count: '*' },
+        }));
+        return Number(result[0]?.count) || 0;
+    } catch (error) {
+        console.error('Error fetching total products count:', error);
+        return 0;
+    }
+}
+
+export default async function ProductsPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ page?: string }>;
+}) {
+    const params = await searchParams;
+    const currentPage = Number(params.page) || 1;
+    const itemsPerPage = 12;
+
+    const [products, categories, totalProductsCount] = await Promise.all([
+        getProducts(currentPage, itemsPerPage),
+        getCategories(),
+        getTotalProductsCount(),
+    ]);
 
     // Fallback categories if empty
     const displayCategories = categories.length > 0 ? categories : [
@@ -144,7 +171,7 @@ export default async function ProductsPage() {
                                 </h3>
                                 <CategorySidebar
                                     categories={displayCategories}
-                                    totalProducts={products.length}
+                                    totalProducts={totalProductsCount}
                                 />
                             </div>
 
@@ -246,22 +273,12 @@ export default async function ProductsPage() {
                                 ))}
                             </div>
 
-                            {/* Pagination UI - Simulation */}
-                            <div className="mt-20 flex items-center justify-center gap-3">
-                                <div className="w-12 h-12 rounded-2xl border border-gray-100 flex items-center justify-center text-gray-300 cursor-not-allowed transition-all">
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
-                                    </svg>
-                                </div>
-                                <div className="w-12 h-12 rounded-2xl bg-orange-600 text-white flex items-center justify-center font-[1000] shadow-2xl shadow-orange-500/40 hover:scale-110 transition-transform cursor-pointer">1</div>
-                                <div className="w-12 h-12 rounded-2xl border border-gray-100 bg-gray-50/50 flex items-center justify-center text-gray-500 font-bold hover:bg-white hover:border-orange-500 hover:text-orange-600 cursor-pointer transition-all hover:shadow-xl hover:shadow-orange-500/5">2</div>
-                                <div className="w-12 h-12 rounded-2xl border border-gray-100 bg-gray-50/50 flex items-center justify-center text-gray-500 font-bold hover:bg-white hover:border-orange-500 hover:text-orange-600 cursor-pointer transition-all hover:shadow-xl hover:shadow-orange-500/5">3</div>
-                                <div className="w-12 h-12 rounded-2xl border border-gray-100 bg-gray-50/50 flex items-center justify-center text-gray-500 cursor-pointer hover:bg-white hover:border-orange-500 hover:text-orange-600 transition-all hover:shadow-xl hover:shadow-orange-500/5">
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-                                    </svg>
-                                </div>
-                            </div>
+                            {/* Pagination UI */}
+                            <Pagination
+                                totalItems={totalProductsCount}
+                                itemsPerPage={itemsPerPage}
+                                currentPage={currentPage}
+                            />
 
                             {/* Mobile Help Card - Visible only on mobile */}
                             <div className="lg:hidden mt-20">

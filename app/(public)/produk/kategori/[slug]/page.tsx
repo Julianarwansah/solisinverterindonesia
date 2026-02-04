@@ -1,9 +1,10 @@
 import directus from '@/lib/directus';
-import { readItems } from '@directus/sdk';
+import { readItems, aggregate } from '@directus/sdk';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import CategorySidebar from '@/components/CategorySidebar';
+import Pagination from '@/components/Pagination';
 
 async function getCategories() {
     try {
@@ -32,31 +33,90 @@ async function getCategoryData(slug: string) {
     }
 }
 
-async function getProductsByCategory(categoryId: string) {
+// Helper to recursively find all descendant category IDs
+function getAllDescendantIds(categories: any[], parentId: string): string[] {
+    const children = categories.filter(c => c.parent_category === parentId);
+    let ids = children.map(c => c.id);
+
+    for (const child of children) {
+        ids = [...ids, ...getAllDescendantIds(categories, child.id)];
+    }
+
+    return ids;
+}
+
+async function getProductsByCategories(categoryIds: string[], page: number = 1, limit: number = 12) {
     try {
+        const offset = (page - 1) * limit;
         const products = await directus.request(readItems('products', {
-            filter: { category: { _eq: categoryId } },
+            filter: { category: { _in: categoryIds } },
             fields: ['*', { images: ['*', { directus_files_id: ['*'] }] }] as any,
+            limit,
+            offset,
         }));
         return products;
     } catch (error) {
-        console.error('Error fetching products by category:', error);
+        console.error('Error fetching products by categories:', error);
         return [];
     }
 }
 
-export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+async function getCategoryProductsCount(categoryIds: string[]) {
+    try {
+        const result = await directus.request(aggregate('products', {
+            filter: { category: { _in: categoryIds } },
+            aggregate: { count: '*' },
+        }));
+        return Number(result[0]?.count) || 0;
+    } catch (error) {
+        console.error('Error fetching category products count:', error);
+        return 0;
+    }
+}
+
+async function getAllProductsCount() {
+    try {
+        const result = await directus.request(aggregate('products', {
+            aggregate: { count: '*' },
+        }));
+        // Directus aggregation returns array like [{ count: 10 }]
+        return Number(result[0]?.count) || 0;
+    } catch (error) {
+        console.error('Error fetching total products count:', error);
+        return 0;
+    }
+}
+
+export default async function CategoryPage({
+    params,
+    searchParams,
+}: {
+    params: Promise<{ slug: string }>;
+    searchParams: Promise<{ page?: string }>;
+}) {
     const { slug } = await params;
-    const [category, allCategories] = await Promise.all([
+    const sParams = await searchParams;
+    const currentPage = Number(sParams.page) || 1;
+    const itemsPerPage = 12;
+
+    const [category, allCategories, totalProducts] = await Promise.all([
         getCategoryData(slug),
-        getCategories()
+        getCategories(),
+        getAllProductsCount()
     ]);
 
     if (!category) {
         notFound();
     }
 
-    const products = await getProductsByCategory(category.id);
+    // Get all descendant IDs to include products from subcategories
+    const allDescendants = getAllDescendantIds(allCategories, category.id);
+    const targetCategoryIds = [category.id, ...allDescendants];
+
+    const [products, categoryProductsCount] = await Promise.all([
+        getProductsByCategories(targetCategoryIds, currentPage, itemsPerPage),
+        getCategoryProductsCount(targetCategoryIds)
+    ]);
 
     return (
         <div className="min-h-screen bg-white relative">
@@ -174,7 +234,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                                 </h3>
                                 <CategorySidebar
                                     categories={allCategories as any[]}
-                                    totalProducts={allCategories.reduce((acc: number, cat: any) => acc + (cat.product_count || 0), 0)}
+                                    totalProducts={totalProducts}
                                     currentSlug={slug}
                                 />
                             </div>
@@ -205,71 +265,78 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                                     </Link>
                                 </div>
                             ) : (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 sm:gap-10">
-                                    {products.map((product: any) => (
-                                        <div
-                                            key={product.id}
-                                            className="group bg-white rounded-[40px] border border-gray-100/50 shadow-sm hover:shadow-[0_40px_80px_-20px_rgba(249,115,22,0.12)] transition-all duration-700 flex flex-col overflow-hidden"
-                                        >
-                                            {/* Image Container with sophisticated hover */}
-                                            <Link href={`/produk/${product.slug}`} className="aspect-square relative overflow-hidden bg-gray-50/50 group-hover:bg-white transition-colors duration-700">
-                                                {product.images && product.images.length > 0 && typeof product.images[0].directus_files_id === 'object' && product.images[0].directus_files_id !== null ? (
-                                                    <Image
-                                                        src={`http://localhost:8055/assets/${product.images[0].directus_files_id.id}`}
-                                                        alt={product.name}
-                                                        fill
-                                                        className="object-contain p-10 transition-transform duration-1000 group-hover:scale-110"
-                                                    />
-                                                ) : (
-                                                    <div className="absolute inset-0 flex items-center justify-center flex-col gap-3 text-gray-200">
-                                                        <svg className="w-16 h-16 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                        </svg>
-                                                    </div>
-                                                )}
+                                <>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 sm:gap-10">
+                                        {products.map((product: any) => (
+                                            <div
+                                                key={product.id}
+                                                className="group bg-white rounded-[40px] border border-gray-100/50 shadow-sm hover:shadow-[0_40px_80px_-20px_rgba(249,115,22,0.12)] transition-all duration-700 flex flex-col overflow-hidden"
+                                            >
+                                                {/* Image Container with sophisticated hover */}
+                                                <Link href={`/produk/${product.slug}`} className="aspect-square relative overflow-hidden bg-gray-50/50 group-hover:bg-white transition-colors duration-700">
+                                                    {product.images && product.images.length > 0 && typeof product.images[0].directus_files_id === 'object' && product.images[0].directus_files_id !== null ? (
+                                                        <Image
+                                                            src={`http://localhost:8055/assets/${product.images[0].directus_files_id.id}`}
+                                                            alt={product.name}
+                                                            fill
+                                                            className="object-contain p-10 transition-transform duration-1000 group-hover:scale-110"
+                                                        />
+                                                    ) : (
+                                                        <div className="absolute inset-0 flex items-center justify-center flex-col gap-3 text-gray-200">
+                                                            <svg className="w-16 h-16 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                            </svg>
+                                                        </div>
+                                                    )}
 
-                                                {/* Advanced Hover Overlay */}
-                                                <div className="absolute inset-0 bg-orange-500/0 group-hover:bg-orange-500/5 transition-all duration-700 flex items-center justify-center">
-                                                    <div className="bg-gray-950 text-white px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-[0.2em] opacity-0 translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 shadow-2xl scale-90 group-hover:scale-100">
-                                                        Lihat Detail
+                                                    {/* Advanced Hover Overlay */}
+                                                    <div className="absolute inset-0 bg-orange-500/0 group-hover:bg-orange-500/5 transition-all duration-700 flex items-center justify-center">
+                                                        <div className="bg-gray-950 text-white px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-[0.2em] opacity-0 translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 shadow-2xl scale-90 group-hover:scale-100">
+                                                            Lihat Detail
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </Link>
+                                                </Link>
 
-                                            {/* Enhanced Content Area */}
-                                            <div className="p-10 flex flex-col flex-1">
-                                                <div className="mb-6">
-                                                    <div className="flex items-center gap-2 mb-4">
-                                                        <span className="w-6 h-[1.5px] bg-orange-500/40" />
-                                                        <span className="text-[10px] font-[1000] uppercase tracking-[0.2em] text-orange-500">Premium Series</span>
+                                                {/* Enhanced Content Area */}
+                                                <div className="p-10 flex flex-col flex-1">
+                                                    <div className="mb-6">
+                                                        <div className="flex items-center gap-2 mb-4">
+                                                            <span className="w-6 h-[1.5px] bg-orange-500/40" />
+                                                            <span className="text-[10px] font-[1000] uppercase tracking-[0.2em] text-orange-500">Premium Series</span>
+                                                        </div>
+                                                        <Link href={`/produk/${product.slug}`} className="text-2xl font-[1000] text-gray-900 group-hover:text-orange-600 transition-colors line-clamp-1 block mb-3 tracking-tight leading-tight">
+                                                            {product.name}
+                                                        </Link>
+                                                        <div
+                                                            className="text-gray-500 text-sm line-clamp-2 leading-relaxed font-medium"
+                                                            dangerouslySetInnerHTML={{ __html: product.description }}
+                                                        />
                                                     </div>
-                                                    <Link href={`/produk/${product.slug}`} className="text-2xl font-[1000] text-gray-900 group-hover:text-orange-600 transition-colors line-clamp-1 block mb-3 tracking-tight leading-tight">
-                                                        {product.name}
-                                                    </Link>
-                                                    <div
-                                                        className="text-gray-500 text-sm line-clamp-2 leading-relaxed font-medium"
-                                                        dangerouslySetInnerHTML={{ __html: product.description }}
-                                                    />
-                                                </div>
 
-                                                <div className="mt-auto flex items-center justify-between gap-4 pt-8 border-t border-gray-50">
-                                                    <div>
-                                                        <span className="text-[10px] font-[1000] text-gray-400 uppercase tracking-[0.2em] block mb-1">Status Harga</span>
-                                                        <span className="text-xl font-[1000] text-gray-950">Hubungi Kami</span>
+                                                    <div className="mt-auto flex items-center justify-between gap-4 pt-8 border-t border-gray-50">
+                                                        <div>
+                                                            <span className="text-[10px] font-[1000] text-gray-400 uppercase tracking-[0.2em] block mb-1">Status Harga</span>
+                                                            <span className="text-xl font-[1000] text-gray-950">Hubungi Kami</span>
+                                                        </div>
+                                                        <Link
+                                                            href={`/produk/${product.slug}`}
+                                                            className="w-14 h-14 rounded-[22px] bg-orange-50 flex items-center justify-center text-orange-600 hover:bg-orange-500 hover:text-white transition-all duration-500 hover:rotate-[360deg] shadow-sm hover:shadow-orange-500/20"
+                                                        >
+                                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                                            </svg>
+                                                        </Link>
                                                     </div>
-                                                    <Link
-                                                        href={`/produk/${product.slug}`}
-                                                        className="w-14 h-14 rounded-[22px] bg-orange-50 flex items-center justify-center text-orange-600 hover:bg-orange-500 hover:text-white transition-all duration-500 hover:rotate-[360deg] shadow-sm hover:shadow-orange-500/20"
-                                                    >
-                                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                                        </svg>
-                                                    </Link>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))}
-                                </div>
+                                        ))}
+                                    </div>
+                                    <Pagination
+                                        totalItems={categoryProductsCount}
+                                        itemsPerPage={itemsPerPage}
+                                        currentPage={currentPage}
+                                    />
+                                </>
                             )}
 
                             {/* Mobile Help Card */}
