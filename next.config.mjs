@@ -21,6 +21,12 @@ const nextConfig = {
                 port: '8055',
                 pathname: '/assets/**',
             },
+            // Add your production Directus URL here
+            // {
+            //     protocol: 'https',
+            //     hostname: 'your-directus-instance.com',
+            //     pathname: '/assets/**',
+            // },
         ],
     },
 };
