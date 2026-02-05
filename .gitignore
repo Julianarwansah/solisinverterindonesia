@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Large files
+project_manual_deploy.zip
+verify_images.php
+list_category_thumbs.php
+check_featured.php
+push_error.txt
