@@ -8,7 +8,7 @@
     "next:dev": "next dev",
     "cms": "cd cms && npx directus start",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3000",
     "lint": "next lint"
   },
   "dependencies": {
