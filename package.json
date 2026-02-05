@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "npm run dev:all",
-    "cms": "cd cms && npx directus start",
-    "dev:all": "start /B npm run next:dev & start /B npm run cms",
+    "dev": "next dev",
+    "dev:win": "start /B npm run next:dev & start /B npm run cms",
     "next:dev": "next dev",
+    "cms": "cd cms && npx directus start",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
