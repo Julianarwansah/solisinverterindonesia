@@ -7,7 +7,7 @@ interface Category {
     id: string | number;
     name: string;
     slug: string;
-    parent_category?: string | number | null;
+    parent_id?: string | number | null;
 }
 
 interface CategorySidebarProps {
@@ -23,8 +23,14 @@ export default function CategorySidebar({ categories, totalProducts, currentSlug
         // Helper to find all parents of the current slug
         const expandPath = (slug: string) => {
             let current = categories.find(c => c.slug === slug);
-            while (current && current.parent_category) {
-                const parentId = current.parent_category.toString();
+            const visited = new Set<string>(); // Cycle detection
+
+            while (current && current.parent_id) {
+                const currentId = current.id.toString();
+                if (visited.has(currentId)) break; // Prevent infinite loop
+                visited.add(currentId);
+
+                const parentId = current.parent_id.toString();
                 initialState[parentId] = true;
                 current = categories.find(c => c.id.toString() === parentId);
             }
@@ -43,15 +49,15 @@ export default function CategorySidebar({ categories, totalProducts, currentSlug
         }));
     };
 
-    const rootCategories = categories.filter(cat => !cat.parent_category);
+    const rootCategories = categories.filter(cat => !cat.parent_id);
 
     return (
         <div className="space-y-4">
             <Link
                 href="/produk"
                 className={`flex items-center justify-between group px-5 py-4 rounded-2xl transition-all hover:-translate-y-1 ${!currentSlug
-                        ? 'bg-gray-950 text-white shadow-2xl shadow-gray-950/20 font-black'
-                        : 'bg-white text-gray-600 hover:text-orange-600 border border-gray-100 font-bold'
+                    ? 'bg-gray-950 text-white shadow-2xl shadow-gray-950/20 font-black'
+                    : 'bg-white text-gray-600 hover:text-orange-600 border border-gray-100 font-bold'
                     }`}
             >
                 <span className="text-sm">Semua Produk</span>
@@ -76,13 +82,13 @@ export default function CategorySidebar({ categories, totalProducts, currentSlug
 }
 
 function CategoryNode({ category, allCategories, currentSlug, openCategories, toggleCategory, level }: any) {
-    const subCategories = allCategories.filter((sub: any) => sub.parent_category?.toString() === category.id.toString());
+    const subCategories = allCategories.filter((sub: any) => sub.parent_id?.toString() === category.id.toString());
     const isExpanded = openCategories[category.id.toString()];
     const isActive = category.slug === currentSlug;
 
     // Check if any descendant is active
     const hasActiveDescendant = (cat: any): boolean => {
-        const children = allCategories.filter((sub: any) => sub.parent_category?.toString() === cat.id.toString());
+        const children = allCategories.filter((sub: any) => sub.parent_id?.toString() === cat.id.toString());
         return children.some((child: any) => child.slug === currentSlug || hasActiveDescendant(child));
     };
 
@@ -94,10 +100,10 @@ function CategoryNode({ category, allCategories, currentSlug, openCategories, to
                 <Link
                     href={`/produk/kategori/${category.slug}`}
                     className={`flex items-center justify-between px-5 py-4 rounded-2xl border transition-all font-black pr-12 ${isActive
-                            ? 'bg-orange-600 border-orange-600 text-white shadow-xl shadow-orange-500/20'
-                            : isParentActive
-                                ? 'bg-orange-50/50 border-orange-200 text-orange-600'
-                                : 'bg-white border-gray-100 hover:border-orange-200 text-gray-900'
+                        ? 'bg-orange-600 border-orange-600 text-white shadow-xl shadow-orange-500/20'
+                        : isParentActive
+                            ? 'bg-orange-50/50 border-orange-200 text-orange-600'
+                            : 'bg-white border-gray-100 hover:border-orange-200 text-gray-900'
                         }`}
                 >
                     <span className={level > 0 ? 'text-[13px]' : 'text-sm'}>{category.name}</span>
@@ -110,8 +116,8 @@ function CategoryNode({ category, allCategories, currentSlug, openCategories, to
                             toggleCategory(category.id);
                         }}
                         className={`absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-xl transition-all ${isExpanded
-                                ? (isActive ? 'bg-white/20 text-white rotate-180' : 'bg-orange-500 text-white rotate-180')
-                                : (isActive ? 'text-white/60 hover:bg-white/10' : 'text-gray-400 hover:bg-gray-100')
+                            ? (isActive ? 'bg-white/20 text-white rotate-180' : 'bg-orange-500 text-white rotate-180')
+                            : (isActive ? 'text-white/60 hover:bg-white/10' : 'text-gray-400 hover:bg-gray-100')
                             }`}
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

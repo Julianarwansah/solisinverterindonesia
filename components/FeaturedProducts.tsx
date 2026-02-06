@@ -1,77 +1,18 @@
-import directus from '@/lib/directus';
-import { readItems } from '@directus/sdk';
+import { laravel } from '@/lib/laravel';
 import Image from 'next/image';
 import Link from 'next/link';
 
 async function getFeaturedProducts() {
     try {
-        const products = await directus.request(readItems('products', {
-            fields: ['id', 'name', 'slug', 'description', 'image', 'tags', { category: ['name'] }] as any,
-            limit: 6,
-        }));
-        return products as any[];
+        return await laravel.products.list(6);
     } catch (error: any) {
-        console.error('Error fetching featured products:', JSON.stringify(error, null, 2));
+        console.error('Error fetching featured products:', error);
         return [];
     }
 }
 
 export default async function FeaturedProducts() {
-    const dbProducts = await getFeaturedProducts();
-
-    // Placeholder data for development/demo
-    const placeholderProducts = [
-        {
-            id: 'p1',
-            name: 'Solis-1P5K-4G',
-            slug: 'solis-1p5k-4g',
-            description: 'Single phase inverter dengan efisiensi 98.1%. Cocok untuk residensial.',
-            images: [],
-            tags: ['Best Seller']
-        },
-        {
-            id: 'p2',
-            name: 'Solis-3P10K-4G',
-            slug: 'solis-3p10k-4g',
-            description: 'Three phase inverter untuk komersial dan industri ringan. Dual MPPT.',
-            images: [],
-            tags: ['New']
-        },
-        {
-            id: 'p3',
-            name: 'Solis-mini-3000-4G',
-            slug: 'solis-mini-3000-4g',
-            description: 'Inverter kompak untuk sistem PLTS atap kecil. Ringan dan mudah instalasi.',
-            images: [],
-            tags: ['Residential']
-        },
-        {
-            id: 'p4',
-            name: 'Solis-110K-5G',
-            slug: 'solis-110k-5g',
-            description: 'High power inverter untuk proyek utilitas skala besar. Efisiensi maksimum.',
-            images: [],
-            tags: ['Industrial']
-        },
-        {
-            id: 'p5',
-            name: 'S5-GR3P10K',
-            slug: 's5-gr3p10k',
-            description: 'Generasi ke-5 inverter 3 phase. Mendukung modul PV berdaya tinggi.',
-            images: [],
-            tags: ['Gen 5']
-        },
-        {
-            id: 'p6',
-            name: 'Solis-RAI-3K-48ES-5G',
-            slug: 'solis-rai-3k-48es-5g',
-            description: 'AC coupled inverter untuk retrofit sistem penyimpanan baterai.',
-            images: [],
-            tags: ['Hybrid']
-        }
-    ];
-
-    const products = dbProducts.length > 0 ? dbProducts : placeholderProducts;
+    const products = await getFeaturedProducts();
 
     return (
         <section className="py-24 bg-white">
@@ -93,7 +34,7 @@ export default async function FeaturedProducts() {
 
                 {/* Product Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-                    {products.map((product) => (
+                    {products.map((product: any) => (
                         <Link
                             href={`/produk/${product.slug}`}
                             key={product.id}
@@ -101,17 +42,9 @@ export default async function FeaturedProducts() {
                         >
                             {/* Image Container */}
                             <div className="aspect-[4/3] relative mb-6 rounded-2xl overflow-hidden bg-slate-50 group-hover:bg-orange-50/50 transition-colors">
-                                {product.image ? (
+                                {product.images && product.images.length > 0 ? (
                                     <Image
-                                        src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055'}/assets/${typeof product.image === 'string' ? product.image : product.image.id}?format=webp&quality=80`}
-                                        alt={product.name}
-                                        fill
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                        className="object-contain p-6 transition-transform duration-700 group-hover:scale-110"
-                                    />
-                                ) : product.images && product.images.length > 0 && product.images[0]?.directus_files_id ? (
-                                    <Image
-                                        src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055'}/assets/${product.images[0].directus_files_id.id}?format=webp&quality=80`}
+                                        src={product.images[0].startsWith('http') ? product.images[0] : `${process.env.NEXT_PUBLIC_LARAVEL_URL || 'http://localhost:8000'}/storage/${product.images[0]}`}
                                         alt={product.name}
                                         fill
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -129,7 +62,7 @@ export default async function FeaturedProducts() {
                                 {/* Badge (if tags exist) */}
                                 {product.tags && product.tags.length > 0 && (
                                     <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider text-slate-900 shadow-sm border border-slate-100">
-                                        {typeof product.tags[0] === 'string' ? product.tags[0] : 'New'}
+                                        {product.tags[0]}
                                     </span>
                                 )}
                             </div>
@@ -140,11 +73,9 @@ export default async function FeaturedProducts() {
                                     <h3 className="text-xl font-bold text-slate-900 group-hover:text-orange-600 transition-colors line-clamp-1">
                                         {product.name}
                                     </h3>
-                                    {/* Description (Truncated) */}
-                                    <div
-                                        className="text-slate-500 text-sm line-clamp-2 mt-2 leading-relaxed"
-                                        dangerouslySetInnerHTML={{ __html: product.description || '' }}
-                                    />
+                                    <p className="text-slate-500 text-sm line-clamp-2 mt-2 leading-relaxed">
+                                        {product.short_description || 'Deskripsi produk kualitas tinggi.'}
+                                    </p>
                                 </div>
 
                                 <div className="mt-auto pt-4 flex items-center justify-between border-t border-slate-50">

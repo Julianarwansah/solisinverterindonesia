@@ -24,4 +24,17 @@ class ArticleController extends Controller
 
         return view('articles.show', compact('article', 'recentArticles'));
     }
+
+    // API Methods
+    public function apiIndex()
+    {
+        $articles = Article::where('status', 'published')->latest()->get();
+        return response()->json($articles);
+    }
+
+    public function apiShow($slug)
+    {
+        $article = Article::where('slug', $slug)->where('status', 'published')->firstOrFail();
+        return response()->json($article);
+    }
 }

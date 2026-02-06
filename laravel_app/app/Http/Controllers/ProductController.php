@@ -47,4 +47,40 @@ class ProductController extends Controller
 
         return view('products.index', compact('products', 'categories', 'category'));
     }
+
+    // API Methods
+    public function apiIndex(Request $request)
+    {
+        $query = Product::with('category')->where('status', 'published');
+
+        if ($request->has('limit')) {
+            $products = $query->limit($request->limit)->get();
+        } else {
+            $products = $query->get();
+        }
+
+        return response()->json($products);
+    }
+
+    public function apiShow($slug)
+    {
+        $product = Product::with('category')->where('slug', $slug)->where('status', 'published')->firstOrFail();
+        return response()->json($product);
+    }
+
+    public function apiCategories()
+    {
+        $categories = Category::all();
+        return response()->json($categories);
+    }
+
+    public function apiCategory($slug)
+    {
+        $category = Category::where('slug', $slug)->firstOrFail();
+        $products = Product::where('category_id', $category->id)->where('status', 'published')->get();
+        return response()->json([
+            'category' => $category,
+            'products' => $products
+        ]);
+    }
 }

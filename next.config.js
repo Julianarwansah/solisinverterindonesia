@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    output: 'standalone',
+    output: 'export',
     eslint: {
         ignoreDuringBuilds: true,
     },
@@ -8,25 +8,20 @@ const nextConfig = {
         ignoreBuildErrors: true,
     },
     images: {
+        unoptimized: true,
         remotePatterns: [
             {
                 protocol: 'http',
                 hostname: 'localhost',
-                port: '8055',
-                pathname: '/assets/**',
+                port: '8000',
+                pathname: '/storage/**',
             },
             {
                 protocol: 'http',
                 hostname: '127.0.0.1',
-                port: '8055',
-                pathname: '/assets/**',
+                port: '8000',
+                pathname: '/storage/**',
             },
-            // Add your production Directus URL here
-            // {
-            //     protocol: 'https',
-            //     hostname: 'your-directus-instance.com',
-            //     pathname: '/assets/**',
-            // },
         ],
     },
 };
