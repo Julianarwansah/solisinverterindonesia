@@ -1,4 +1,4 @@
-const LARAVEL_URL = process.env.NEXT_PUBLIC_LARAVEL_URL || 'http://127.0.0.1:8000';
+const LARAVEL_URL = process.env.LARAVEL_API_URL || process.env.NEXT_PUBLIC_LARAVEL_URL || 'http://127.0.0.1:8000';
 const API_URL = `${LARAVEL_URL}/api`;
 
 export async function fetchLaravel(path: string, options: RequestInit = {}) {

@@ -17,6 +17,12 @@ const nextConfig = {
                 pathname: '/storage/**',
             },
             {
+                protocol: 'https',
+                hostname: 'solisinverterindonesia.com',
+                port: '',
+                pathname: '/storage/**',
+            },
+            {
                 protocol: 'http',
                 hostname: '127.0.0.1',
                 port: '8000',
