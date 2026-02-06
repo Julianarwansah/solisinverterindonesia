@@ -33,43 +33,37 @@ Jika repository Anda **Private**, Hostinger butuh izin akses:
 ## 📋 Tahap 3: Hubungkan GitHub ke Hostinger
 
 > [!IMPORTANT]
-> **PENTING: Jika Website Sudah Live (Ada file di hPanel)**
-> Karena Hostinger mewajibkan folder `public_html` **KOSONG**, ikuti langkah aman ini agar website tidak error lama:
-> 1. **Backup file `.env`**: Masuk ke File Manager, copy file `.env` ke folder lain (misal folder root `/`).
-> 2. **Pindahkan isi `public_html`**: Buat folder baru bernama `live_backup` (sejajar dengan `public_html`), lalu pindahkan semua isi `public_html` ke sana.
-> 3. **Link Git**: Sekarang `public_html` kosong, lakukan proses **Create** di menu Git Hostinger.
-> 4. **Kembalikan `.env`**: Setelah file dari GitHub masuk ke `public_html`, copy kembali file `.env` tadi ke dalam `public_html`.
-> 5. **Sync Storage**: Jika ada gambar yang sudah diupload user di website live, pindahkan folder `storage/app/public` dari `live_backup` ke `public_html/storage/app/public`.
+> **PENTING: Struktur Folder Anda (`public_html/laravel_app`)**
+> Karena project Anda berada di dalam folder `laravel_app`, perhatikan pengaturan ini:
+> 1. **Backup file `.env`**: Masuk ke File Manager, copy file `.env` dari dalam `public_html/laravel_app` ke folder root (luar `public_html`).
+> 2. **Pindahkan isi `laravel_app`**: Pindahkan semua isi `public_html/laravel_app` ke folder backup (misal `live_backup`).
+> 3. **Link Git**: Saat mengisi form Git:
+>    - **Install Path**: Masukkan `laravel_app` (agar file dari GitHub masuk ke folder tersebut).
+>    - **PENTING**: Folder `public_html/laravel_app` harus **KOSONG** saat pertama kali dihubungkan.
 
 1. Di Hostinger hPanel (**Advanced** -> **Git**):
-2. **Repository URL**: Masukkan URL SSH repo Anda (contoh: `git@github.com:user/repo.git`).
+2. **Repository URL**: Masukkan URL SSH repo Anda.
 3. **Branch**: `main`.
-4. **Install Path**: Kosongkan (untuk install langsung di `public_html`).
+4. **Install Path**: Ketik `laravel_app`.
 5. Klik **Create**.
 
 ## 📋 Tahap 4: Setup Auto-Deployment (Webhook)
 
-Agar website update otomatis saat Anda `git push`:
-1. Di Hostinger, klik tombol **Auto-deployment** pada repo yang baru dibuat.
-2. Copy **Webhook URL** yang diberikan.
-3. Di GitHub Repository -> **Settings** -> **Webhooks** -> **Add webhook**.
-4. Paste URL ke **Payload URL**.
-5. **Content type**: `application/json`.
-6. Klik **Add webhook**.
+... (sama seperti sebelumnya) ...
 
-## 📋 Tahap 5: Deployment Script (Khusus Laravel)
+## 📋 Tahap 5: Deployment Script (Struktur `laravel_app`)
 
-Agar Laravel berjalan sempurna setelah diupdate, Hostinger menyediakan fitur **Deployment Script**:
+Sesuaikan perintah `cd` agar script berjalan di folder yang benar:
 1. Di menu Git Hostinger, cari bagian **Deployment Script**.
 2. Masukkan script berikut:
    ```bash
-   # Masuk ke direktori aplikasi
-   cd public_html
+   # Masuk ke direktori aplikasi (SESUAI STRUKTUR ANDA)
+   cd public_html/laravel_app
    
-   # Update dependencies (jika ada perubahan composer.json)
+   # Update dependencies
    composer install --no-dev --optimize-autoloader
    
-   # Link storage (hanya sekali, tapi aman dijalankan berulang)
+   # Link storage
    php artisan storage:link
    
    # Jalankan migrasi database
@@ -80,7 +74,7 @@ Agar Laravel berjalan sempurna setelah diupdate, Hostinger menyediakan fitur **D
    php artisan route:cache
    php artisan view:cache
    ```
-3. Klik **Save**. Sekarang, setiap kali Anda push, script ini akan dijalankan otomatis.
+3. Klik **Save**.
 
 ## 🚀 Keuntungan Cara Ini:
 - **Backup Aman**: Kode Anda tersimpan di GitHub.
