@@ -11,13 +11,15 @@ Menggunakan GitHub sebagai jembatan deployment adalah cara paling profesional. A
    git commit -m "Initial commit: Laravel version with Next.js UI"
    ```
 2. **Setup Repository**:
-   - Buat repository baru di [github.com](https://github.com) (Private disarankan).
-   - Hubungkan folder lokal ke GitHub:
+   - **Jika belum ada**: Buat repository baru di [github.com](https://github.com) (Private disarankan).
+   - **Jika SUDAH ada**: Anda bisa langsung pakai repository tersebut.
+   - Hubungkan folder lokal ke GitHub (lewati jika sudah terhubung):
      ```bash
      git remote add origin https://github.com/Username/repo-anda.git
      git branch -M main
      git push -u origin main
      ```
+   - *Catatan: Pastikan semua perubahan terbaru sudah di-push sebelum lanjut ke Hostinger.*
 
 ## 📋 Tahap 2: Setup SSH Key (Untuk Private Repo)
 
