@@ -29,7 +29,7 @@ Hostinger memiliki panel (hPanel) yang sangat user-friendly untuk Laravel. Versi
 - Di File Manager, edit `.env`:
   ```env
   APP_ENV=production
-  APP_DEBUG=false
+  APP_DEBUG=u363044081_solosiindo
   APP_URL=https://nama-domain-anda.com
 
   DB_DATABASE=u123456789_nama_db
@@ -49,3 +49,4 @@ Hostinger memiliki panel (hPanel) yang sangat user-friendly untuk Laravel. Versi
 ## 🔔 Keuntungan di Hostinger:
 - **Auto-Installer**: Hostinger memiliki fitur deteksi Laravel yang membantu konfigurasi folder `public` secara otomatis.
 - **Node.js**: Sebenarnya bisa Next.js, tapi versi Laravel ini **jauh lebih hemat RAM** dan jarang mengalami error 503 dibandingkan Next.js di Shared Hosting.
+
