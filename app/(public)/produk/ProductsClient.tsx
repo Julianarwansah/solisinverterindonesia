@@ -29,9 +29,19 @@ interface ProductsClientProps {
     initialProducts: Product[];
     initialMeta: Meta;
     categories: any[];
+    categorySlug?: string;
+    categoryName?: string;
+    categoryDescription?: string;
 }
 
-function ProductsContent({ initialProducts, initialMeta, categories }: ProductsClientProps) {
+function ProductsContent({
+    initialProducts,
+    initialMeta,
+    categories,
+    categorySlug,
+    categoryName,
+    categoryDescription
+}: ProductsClientProps) {
     const searchParams = useSearchParams();
     const pageParam = searchParams.get('page');
 
@@ -49,7 +59,7 @@ function ProductsContent({ initialProducts, initialMeta, categories }: ProductsC
 
             setLoading(true);
             try {
-                const response = await laravel.products.list(page, 12);
+                const response = await laravel.products.list(page, 12, categorySlug);
                 setProducts(response.data);
                 setMeta(response.meta);
             } catch (error) {
@@ -65,7 +75,7 @@ function ProductsContent({ initialProducts, initialMeta, categories }: ProductsC
             setProducts(initialProducts);
             setMeta(initialMeta);
         }
-    }, [pageParam, initialProducts, initialMeta]);
+    }, [pageParam, initialProducts, initialMeta, categorySlug]);
 
     return (
         <div className="min-h-screen bg-white relative overflow-x-hidden">
@@ -80,8 +90,13 @@ function ProductsContent({ initialProducts, initialMeta, categories }: ProductsC
                             <span className="text-orange-600 font-black">Produk</span>
                         </div>
                         <h1 className="text-4xl sm:text-5xl md:text-7xl font-[1000] text-gray-900 tracking-tight leading-[1.1] mb-8 capitalize">
-                            Katalog Produk
+                            {categoryName || 'Katalog Produk'}
                         </h1>
+                        {categoryDescription && (
+                            <p className="text-base md:text-xl text-gray-500 font-medium leading-relaxed">
+                                {categoryDescription}
+                            </p>
+                        )}
                     </div>
                 </div>
             </section>
@@ -114,7 +129,7 @@ function ProductsContent({ initialProducts, initialMeta, categories }: ProductsC
                                 <CategorySidebar
                                     categories={categories}
                                     totalProducts={meta.total}
-                                    currentSlug=""
+                                    currentSlug={categorySlug || ""}
                                 />
                             </div>
                         </aside>
