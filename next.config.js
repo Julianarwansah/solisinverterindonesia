@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     output: 'export',
+    trailingSlash: true, // Recommended for static hosting to avoid 403/404 on refresh
     images: {
         unoptimized: true, // Required for static export
         remotePatterns: [
