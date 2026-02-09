@@ -14,7 +14,7 @@ export default function Pagination({ totalItems, itemsPerPage, currentPage }: Pa
     const searchParams = useSearchParams();
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-    if (totalPages <= 1) return null;
+    // if (totalPages <= 1) return null;
 
     const createPageURL = (pageNumber: number | string) => {
         const params = new URLSearchParams(searchParams);
@@ -40,8 +40,8 @@ export default function Pagination({ totalItems, itemsPerPage, currentPage }: Pa
                     key={i}
                     href={createPageURL(i)}
                     className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center font-bold transition-all ${isActive
-                            ? 'bg-orange-600 text-white shadow-xl shadow-orange-500/40 hover:scale-110'
-                            : 'border border-gray-100 bg-gray-50/50 text-gray-500 hover:bg-white hover:border-orange-500 hover:text-orange-600 hover:shadow-xl hover:shadow-orange-500/5'
+                        ? 'bg-orange-600 text-white shadow-xl shadow-orange-500/40 hover:scale-110'
+                        : 'border border-gray-100 bg-gray-50/50 text-gray-500 hover:bg-white hover:border-orange-500 hover:text-orange-600 hover:shadow-xl hover:shadow-orange-500/5'
                         }`}
                 >
                     {i}
