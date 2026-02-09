@@ -1,5 +1,4 @@
-import directus, { Article } from '@/lib/directus';
-import { readItems } from '@directus/sdk';
+import { laravel } from '@/lib/laravel';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Metadata } from 'next';
@@ -9,14 +8,12 @@ export const metadata: Metadata = {
     description: 'Baca berita dan artikel terbaru seputar Solis Inverter di Indonesia.',
 };
 
-async function getArticles(): Promise<Article[]> {
+async function getArticles() {
     try {
-        const articles = await directus.request(readItems('articles', {
-            fields: ['id', 'title', 'slug', 'excerpt', 'featured_image', 'tags'] as any,
-        })) as any[];
-        return articles;
+        const response = await laravel.articles.list(1, 100); // Fetch enough for now
+        return response.data || [];
     } catch (error) {
-        console.error('Error fetching articles:', JSON.stringify(error, null, 2));
+        console.error('Error fetching articles:', error);
         return [];
     }
 }
@@ -25,6 +22,8 @@ export default async function ArticlesPage() {
     const allArticles = await getArticles();
     const featuredArticle = allArticles[0];
     const otherArticles = allArticles.slice(1);
+
+    const baseUrl = process.env.NEXT_PUBLIC_LARAVEL_URL || 'http://localhost:8000';
 
     return (
         <main className="min-h-screen bg-white relative font-sans">
@@ -77,7 +76,7 @@ export default async function ArticlesPage() {
                                         <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
                                             <div className="lg:col-span-7 aspect-[16/10] relative overflow-hidden">
                                                 <Image
-                                                    src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055'}/assets/${typeof featuredArticle.featured_image === 'object' ? featuredArticle.featured_image.id : featuredArticle.featured_image}?format=webp&quality=80`}
+                                                    src={featuredArticle.featured_image ? (featuredArticle.featured_image.startsWith('http') ? featuredArticle.featured_image : `${baseUrl}/${featuredArticle.featured_image}`) : '/placeholder.jpg'}
                                                     alt={featuredArticle.title}
                                                     fill
                                                     className="object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80 group-hover:opacity-100"
@@ -124,7 +123,7 @@ export default async function ArticlesPage() {
                                             <Link key={article.id} href={`/artikel/${article.slug}`} className="group flex flex-col h-full bg-white rounded-[40px] border border-gray-100/50 p-4 hover:border-orange-200 hover:shadow-2xl hover:shadow-orange-500/5 transition-all duration-500">
                                                 <div className="aspect-[16/10] relative mb-8 rounded-[32px] overflow-hidden">
                                                     <Image
-                                                        src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055'}/assets/${typeof article.featured_image === 'object' ? article.featured_image.id : article.featured_image}?format=webp&quality=80`}
+                                                        src={article.featured_image ? (article.featured_image.startsWith('http') ? article.featured_image : `${baseUrl}/${article.featured_image}`) : '/placeholder.jpg'}
                                                         alt={article.title}
                                                         fill
                                                         className="object-cover transition-transform duration-700 group-hover:scale-110"

@@ -1,5 +1,4 @@
-import directus from '@/lib/directus';
-import { readItems, readItem } from '@directus/sdk';
+import { laravel } from '@/lib/laravel';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -12,14 +11,8 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await params;
     try {
-        const products = await directus.request(readItems('products', {
-            filter: { slug: { _eq: slug } },
-            fields: ['name', 'meta_title', 'meta_description'],
-            limit: 1
-        }));
-
-        if (!products || products.length === 0) return { title: 'Produk Tidak Ditemukan' };
-        const product = products[0];
+        const product = await laravel.products.show(slug);
+        if (!product) return { title: 'Produk Tidak Ditemukan' };
 
         return {
             title: product.meta_title || product.name,
@@ -32,13 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 async function getProduct(slug: string) {
     try {
-        const products = await directus.request(readItems('products', {
-            filter: { slug: { _eq: slug } },
-            fields: ['id', 'name', 'slug', 'description', 'image', 'tags', 'meta_title', 'meta_description', { category: ['name'] }, { images: [{ directus_files_id: ['id'] }] }] as any,
-            limit: 1
-        })) as any[];
-
-        return products[0];
+        return await laravel.products.show(slug);
     } catch (error) {
         console.error('Error fetching product:', error);
         return null;
@@ -51,25 +38,18 @@ export default async function ProductDetail({ params }: Props) {
 
     if (!product) notFound();
 
-    const baseUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055';
+    const baseUrl = process.env.NEXT_PUBLIC_LARAVEL_URL || 'http://localhost:8000';
 
     // Collect all unique images
     const images: string[] = [];
 
-    // 1. Featured Image
-    if (product.image) {
-        images.push(`${baseUrl}/assets/${product.image}?format=webp&quality=80`);
+    // 1. Featured Image (Laravel usually returns array of strings or single string)
+    if (product.images && Array.isArray(product.images)) {
+        product.images.forEach((img: string) => {
+            const url = img.startsWith('http') ? img : `${baseUrl}/${img}`;
+            if (!images.includes(url)) images.push(url);
+        });
     }
-
-    // 2. Gallery Images
-    product.images?.forEach((img: any) => {
-        if (img.directus_files_id?.id) {
-            const url = `${baseUrl}/assets/${img.directus_files_id.id}?format=webp&quality=80`;
-            if (!images.includes(url)) {
-                images.push(url);
-            }
-        }
-    });
 
     return (
         <div className="min-h-screen bg-gray-50/50 pb-20 overflow-x-hidden w-full">
@@ -97,7 +77,7 @@ export default async function ProductDetail({ params }: Props) {
                         <div>
                             {product.category && (
                                 <Link
-                                    href={`/kategori/${product.category.name}`}
+                                    href={`/kategori/${product.category.slug}`}
                                     className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-orange-50 text-orange-600 mb-4 hover:bg-orange-100 transition-colors"
                                 >
                                     {product.category.name}
@@ -114,7 +94,6 @@ export default async function ProductDetail({ params }: Props) {
                             </div>
                         </div>
 
-                        {/* Description */}
                         {/* Description */}
                         <ProductDescription content={product.description} />
 

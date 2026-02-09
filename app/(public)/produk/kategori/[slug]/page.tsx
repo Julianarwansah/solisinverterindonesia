@@ -1,5 +1,4 @@
-import directus from '@/lib/directus';
-import { readItems, aggregate } from '@directus/sdk';
+import { laravel } from '@/lib/laravel';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -10,82 +9,28 @@ import MobileCategoryFilter from '@/components/MobileCategoryFilter';
 
 async function getCategories() {
     try {
-        const categories = await directus.request(readItems('product_categories', {
-            fields: ['id', 'name', 'slug', 'parent_category'] as any,
-        }));
-        return categories;
+        return await laravel.products.categories.list();
     } catch (error) {
         console.error('Error fetching categories:', error);
         return [];
     }
 }
 
-async function getCategoryData(slug: string) {
+async function getCategory(slug: string) {
     try {
-        const categories = await directus.request(readItems('product_categories', {
-            filter: { slug: { _eq: slug } },
-            fields: ['id', 'name', 'slug', 'description', 'parent_category'] as any,
-        }));
-
-        if (!categories || categories.length === 0) return null;
-        return categories[0];
+        return await laravel.products.categories.show(slug);
     } catch (error) {
         console.error('Error fetching category:', error);
         return null;
     }
 }
 
-// Helper to recursively find all descendant category IDs
-function getAllDescendantIds(categories: any[], parentId: string): string[] {
-    const children = categories.filter(c => c.parent_category === parentId);
-    let ids = children.map(c => c.id);
-
-    for (const child of children) {
-        ids = [...ids, ...getAllDescendantIds(categories, child.id)];
-    }
-
-    return ids;
-}
-
-async function getProductsByCategories(categoryIds: string[], page: number = 1, limit: number = 12) {
+async function getProducts(categorySlug: string, page: number = 1, limit: number = 12) {
     try {
-        const offset = (page - 1) * limit;
-        const products = await directus.request(readItems('products', {
-            filter: { category: { _in: categoryIds } },
-            fields: ['*', { images: ['*', { directus_files_id: ['*'] }] }] as any,
-            limit,
-            offset,
-        }));
-        return products;
+        return await laravel.products.list(page, limit, categorySlug);
     } catch (error) {
-        console.error('Error fetching products by categories:', error);
-        return [];
-    }
-}
-
-async function getCategoryProductsCount(categoryIds: string[]) {
-    try {
-        const result = await directus.request(aggregate('products', {
-            filter: { category: { _in: categoryIds } },
-            aggregate: { count: '*' },
-        }));
-        return Number(result[0]?.count) || 0;
-    } catch (error) {
-        console.error('Error fetching category products count:', error);
-        return 0;
-    }
-}
-
-async function getAllProductsCount() {
-    try {
-        const result = await directus.request(aggregate('products', {
-            aggregate: { count: '*' },
-        }));
-        // Directus aggregation returns array like [{ count: 10 }]
-        return Number(result[0]?.count) || 0;
-    } catch (error) {
-        console.error('Error fetching total products count:', error);
-        return 0;
+        console.error('Error fetching products by category:', error);
+        return { data: [], meta: { total: 0, per_page: limit, current_page: page, last_page: 0 } };
     }
 }
 
@@ -101,24 +46,20 @@ export default async function CategoryPage({
     const currentPage = Number(sParams.page) || 1;
     const itemsPerPage = 12;
 
-    const [category, allCategories, totalProducts] = await Promise.all([
-        getCategoryData(slug),
+    const [category, allCategories] = await Promise.all([
+        getCategory(slug),
         getCategories(),
-        getAllProductsCount()
     ]);
 
     if (!category) {
         notFound();
     }
 
-    // Get all descendant IDs to include products from subcategories
-    const allDescendants = getAllDescendantIds(allCategories, category.id);
-    const targetCategoryIds = [category.id, ...allDescendants];
+    const productsResponse = await getProducts(slug, currentPage, itemsPerPage);
+    const products = productsResponse.data || [];
+    const totalProducts = productsResponse.total || productsResponse.meta?.total || 0; // Handle varied pagination response structures
 
-    const [products, categoryProductsCount] = await Promise.all([
-        getProductsByCategories(targetCategoryIds, currentPage, itemsPerPage),
-        getCategoryProductsCount(targetCategoryIds)
-    ]);
+    const baseUrl = process.env.NEXT_PUBLIC_LARAVEL_URL || 'http://localhost:8000';
 
     return (
         <div className="min-h-screen bg-white relative overflow-x-hidden">
@@ -182,13 +123,13 @@ export default async function CategoryPage({
             </div>
 
             {/* Breadcrumb for subcategories */}
-            {category.parent_category && (
+            {category.parent_id && (
                 <div className="max-w-7xl mx-auto px-8 pt-8">
                     <div className="flex items-center gap-2 text-xs font-bold text-gray-400">
                         <Link href="/produk" className="hover:text-orange-600">Katalog</Link>
                         <span>/</span>
                         {(() => {
-                            const parent = allCategories.find(p => p.id === category.parent_category);
+                            const parent = allCategories.find((p: any) => p.id === category.parent_id);
                             return parent ? (
                                 <>
                                     <Link href={`/produk/kategori/${parent.slug}`} className="hover:text-orange-600">{parent.name}</Link>
@@ -246,72 +187,77 @@ export default async function CategoryPage({
                             ) : (
                                 <>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 sm:gap-10">
-                                        {products.map((product: any) => (
-                                            <div
-                                                key={product.id}
-                                                className="group bg-white rounded-[40px] border border-gray-100/50 shadow-sm hover:shadow-[0_40px_80px_-20px_rgba(249,115,22,0.12)] transition-all duration-700 flex flex-col overflow-hidden"
-                                            >
-                                                {/* Image Container with sophisticated hover */}
-                                                <Link href={`/produk/${product.slug}`} className="aspect-square relative overflow-hidden bg-gray-50/50 group-hover:bg-white transition-colors duration-700">
-                                                    {product.images && product.images.length > 0 && typeof product.images[0].directus_files_id === 'object' && product.images[0].directus_files_id !== null ? (
+                                        {products.map((product: any) => {
+                                            // Handle various image formats (array of strings, string, or Directus format fallback)
+                                            let displayImage = '/placeholder.jpg';
+                                            if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+                                                const firstImg = product.images[0];
+                                                if (typeof firstImg === 'string') {
+                                                    displayImage = firstImg.startsWith('http') ? firstImg : `${baseUrl}/${firstImg}`;
+                                                } else if (firstImg.directus_files_id) { // Fallback for old structure if any
+                                                    displayImage = `${baseUrl}/assets/${firstImg.directus_files_id.id}`;
+                                                }
+                                            }
+
+                                            return (
+                                                <div
+                                                    key={product.id}
+                                                    className="group bg-white rounded-[40px] border border-gray-100/50 shadow-sm hover:shadow-[0_40px_80px_-20px_rgba(249,115,22,0.12)] transition-all duration-700 flex flex-col overflow-hidden"
+                                                >
+                                                    {/* Image Container with sophisticated hover */}
+                                                    <Link href={`/produk/${product.slug}`} className="aspect-square relative overflow-hidden bg-gray-50/50 group-hover:bg-white transition-colors duration-700">
                                                         <Image
-                                                            src={`http://localhost:8055/assets/${product.images[0].directus_files_id.id}`}
+                                                            src={displayImage}
                                                             alt={product.name}
                                                             fill
                                                             className="object-contain p-10 transition-transform duration-1000 group-hover:scale-110"
                                                         />
-                                                    ) : (
-                                                        <div className="absolute inset-0 flex items-center justify-center flex-col gap-3 text-gray-200">
-                                                            <svg className="w-16 h-16 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                            </svg>
-                                                        </div>
-                                                    )}
 
-                                                    {/* Advanced Hover Overlay */}
-                                                    <div className="absolute inset-0 bg-orange-500/0 group-hover:bg-orange-500/5 transition-all duration-700 flex items-center justify-center">
-                                                        <div className="bg-gray-950 text-white px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-[0.2em] opacity-0 translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 shadow-2xl scale-90 group-hover:scale-100">
-                                                            Lihat Detail
+                                                        {/* Advanced Hover Overlay */}
+                                                        <div className="absolute inset-0 bg-orange-500/0 group-hover:bg-orange-500/5 transition-all duration-700 flex items-center justify-center">
+                                                            <div className="bg-gray-950 text-white px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-[0.2em] opacity-0 translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 shadow-2xl scale-90 group-hover:scale-100">
+                                                                Lihat Detail
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </Link>
+                                                    </Link>
 
-                                                {/* Enhanced Content Area */}
-                                                <div className="p-10 flex flex-col flex-1">
-                                                    <div className="mb-6">
-                                                        <div className="flex items-center gap-2 mb-4">
-                                                            <span className="w-6 h-[1.5px] bg-orange-500/40" />
-                                                            <span className="text-[10px] font-[1000] uppercase tracking-[0.2em] text-orange-500">Premium Series</span>
+                                                    {/* Enhanced Content Area */}
+                                                    <div className="p-10 flex flex-col flex-1">
+                                                        <div className="mb-6">
+                                                            <div className="flex items-center gap-2 mb-4">
+                                                                <span className="w-6 h-[1.5px] bg-orange-500/40" />
+                                                                <span className="text-[10px] font-[1000] uppercase tracking-[0.2em] text-orange-500">Premium Series</span>
+                                                            </div>
+                                                            <Link href={`/produk/${product.slug}`} className="text-xl sm:text-2xl font-[1000] text-gray-900 group-hover:text-orange-600 transition-colors line-clamp-1 block mb-3 tracking-tight leading-tight">
+                                                                {product.name}
+                                                            </Link>
+                                                            <div
+                                                                className="text-gray-500 text-sm line-clamp-2 leading-relaxed font-medium"
+                                                                dangerouslySetInnerHTML={{ __html: product.description }}
+                                                            />
                                                         </div>
-                                                        <Link href={`/produk/${product.slug}`} className="text-xl sm:text-2xl font-[1000] text-gray-900 group-hover:text-orange-600 transition-colors line-clamp-1 block mb-3 tracking-tight leading-tight">
-                                                            {product.name}
-                                                        </Link>
-                                                        <div
-                                                            className="text-gray-500 text-sm line-clamp-2 leading-relaxed font-medium"
-                                                            dangerouslySetInnerHTML={{ __html: product.description }}
-                                                        />
-                                                    </div>
 
-                                                    <div className="mt-auto flex items-center justify-between gap-4 pt-8 border-t border-gray-50">
-                                                        <div>
-                                                            <span className="text-[10px] font-[1000] text-gray-400 uppercase tracking-[0.2em] block mb-1">Status Harga</span>
-                                                            <span className="text-xl font-[1000] text-gray-950">Hubungi Kami</span>
+                                                        <div className="mt-auto flex items-center justify-between gap-4 pt-8 border-t border-gray-50">
+                                                            <div>
+                                                                <span className="text-[10px] font-[1000] text-gray-400 uppercase tracking-[0.2em] block mb-1">Status Harga</span>
+                                                                <span className="text-xl font-[1000] text-gray-950">Hubungi Kami</span>
+                                                            </div>
+                                                            <Link
+                                                                href={`/produk/${product.slug}`}
+                                                                className="w-14 h-14 rounded-[22px] bg-orange-50 flex items-center justify-center text-orange-600 hover:bg-orange-500 hover:text-white transition-all duration-500 hover:rotate-[360deg] shadow-sm hover:shadow-orange-500/20"
+                                                            >
+                                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                                                </svg>
+                                                            </Link>
                                                         </div>
-                                                        <Link
-                                                            href={`/produk/${product.slug}`}
-                                                            className="w-14 h-14 rounded-[22px] bg-orange-50 flex items-center justify-center text-orange-600 hover:bg-orange-500 hover:text-white transition-all duration-500 hover:rotate-[360deg] shadow-sm hover:shadow-orange-500/20"
-                                                        >
-                                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                                            </svg>
-                                                        </Link>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            )
+                                        })}
                                     </div>
                                     <Pagination
-                                        totalItems={categoryProductsCount}
+                                        totalItems={totalProducts}
                                         itemsPerPage={itemsPerPage}
                                         currentPage={currentPage}
                                     />

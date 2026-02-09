@@ -1,5 +1,4 @@
-import directus, { Article } from '@/lib/directus';
-import { readItems } from '@directus/sdk';
+import { laravel } from '@/lib/laravel';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Metadata, ResolvingMetadata } from 'next';
@@ -9,18 +8,11 @@ interface Props {
     params: Promise<{ slug: string }>;
 }
 
-async function getArticle(slug: string): Promise<Article | null> {
+async function getArticle(slug: string) {
     try {
-        const articles = await directus.request(readItems('articles', {
-            filter: { slug: { _eq: slug } },
-            fields: ['*', { featured_image: ['*'] }] as any,
-            limit: 1
-        })) as any[];
-
-        if (!articles || articles.length === 0) return null;
-        return articles[0];
+        return await laravel.articles.show(slug);
     } catch (error) {
-        console.error('Error fetching article detail:', JSON.stringify(error, null, 2));
+        console.error('Error fetching article detail:', error);
         return null;
     }
 }
@@ -34,11 +26,16 @@ export async function generateMetadata(
 
     if (!article) return { title: 'Artikel Tidak Ditemukan' };
 
+    const baseUrl = process.env.NEXT_PUBLIC_LARAVEL_URL || 'http://localhost:8000';
+    const ogImage = article.og_image
+        ? (article.og_image.startsWith('http') ? article.og_image : `${baseUrl}/${article.og_image}`)
+        : undefined;
+
     return {
         title: `${article.seo_title || article.title} | Solis Inverter Indonesia`,
         description: article.seo_description || article.excerpt,
         openGraph: {
-            images: article.og_image ? [`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${typeof article.og_image === 'object' ? article.og_image.id : article.og_image}`] : [],
+            images: ogImage ? [ogImage] : [],
         },
     };
 }
@@ -51,8 +48,9 @@ export default async function ArticleDetailPage({ params }: Props) {
         notFound();
     }
 
+    const baseUrl = process.env.NEXT_PUBLIC_LARAVEL_URL || 'http://localhost:8000';
     const imageUrl = article.featured_image
-        ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055'}/assets/${typeof article.featured_image === 'object' ? article.featured_image.id : article.featured_image}?format=webp&quality=80`
+        ? (article.featured_image.startsWith('http') ? article.featured_image : `${baseUrl}/${article.featured_image}`)
         : null;
 
     return (
@@ -95,7 +93,7 @@ export default async function ArticleDetailPage({ params }: Props) {
                 {article.tags && article.tags.length > 0 && (
                     <div className="mt-16 pt-8 border-t border-gray-100">
                         <div className="flex flex-wrap gap-3">
-                            {article.tags.map((tag, i) => (
+                            {article.tags.map((tag: string, i: number) => (
                                 <span key={i} className="px-5 py-2 bg-gray-50 text-gray-500 rounded-full text-xs font-bold uppercase tracking-widest">
                                     #{tag}
                                 </span>

@@ -1,13 +1,9 @@
-import directus from '@/lib/directus';
-import { readItems } from '@directus/sdk';
+import { laravel } from '@/lib/laravel';
 import { Metadata } from 'next';
 
-async function getCategories(): Promise<any[]> {
+async function getCategories() {
   try {
-    const categories = await directus.request(readItems('product_categories', {
-      fields: ['id', 'name', 'slug', 'description', 'thumbnail'] as any,
-    }));
-    return categories;
+    return await laravel.products.categories();
   } catch (error) {
     console.error('Error fetching categories:', error);
     return [];
