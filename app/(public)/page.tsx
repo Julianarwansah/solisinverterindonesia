@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 
 async function getCategories() {
   try {
-    return await laravel.products.categories();
+    return await laravel.products.categories.list();
   } catch (error) {
     console.error('Error fetching categories:', error);
     return [];

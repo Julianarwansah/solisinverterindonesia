@@ -1,17 +1,13 @@
-import directus from '@/lib/directus';
-import { readItems } from '@directus/sdk';
+import { laravel } from '@/lib/laravel';
 import Image from 'next/image';
 import Link from 'next/link';
 
 async function getFeaturedProducts() {
     try {
-        const products = await directus.request(readItems('products', {
-            fields: ['id', 'name', 'slug', 'description', 'image', 'tags', { category: ['name'] }] as any,
-            limit: 6,
-        }));
-        return products as any[];
-    } catch (error: any) {
-        console.error('Error fetching featured products:', JSON.stringify(error, null, 2));
+        const response = await laravel.products.list(1, 6);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching featured products:', error);
         return [];
     }
 }
@@ -19,7 +15,7 @@ async function getFeaturedProducts() {
 export default async function FeaturedProducts() {
     const dbProducts = await getFeaturedProducts();
 
-    // Placeholder data for development/demo
+    // Placeholder data for development/demo (optional fallback)
     const placeholderProducts = [
         {
             id: 'p1',
@@ -29,49 +25,11 @@ export default async function FeaturedProducts() {
             images: [],
             tags: ['Best Seller']
         },
-        {
-            id: 'p2',
-            name: 'Solis-3P10K-4G',
-            slug: 'solis-3p10k-4g',
-            description: 'Three phase inverter untuk komersial dan industri ringan. Dual MPPT.',
-            images: [],
-            tags: ['New']
-        },
-        {
-            id: 'p3',
-            name: 'Solis-mini-3000-4G',
-            slug: 'solis-mini-3000-4g',
-            description: 'Inverter kompak untuk sistem PLTS atap kecil. Ringan dan mudah instalasi.',
-            images: [],
-            tags: ['Residential']
-        },
-        {
-            id: 'p4',
-            name: 'Solis-110K-5G',
-            slug: 'solis-110k-5g',
-            description: 'High power inverter untuk proyek utilitas skala besar. Efisiensi maksimum.',
-            images: [],
-            tags: ['Industrial']
-        },
-        {
-            id: 'p5',
-            name: 'S5-GR3P10K',
-            slug: 's5-gr3p10k',
-            description: 'Generasi ke-5 inverter 3 phase. Mendukung modul PV berdaya tinggi.',
-            images: [],
-            tags: ['Gen 5']
-        },
-        {
-            id: 'p6',
-            name: 'Solis-RAI-3K-48ES-5G',
-            slug: 'solis-rai-3k-48es-5g',
-            description: 'AC coupled inverter untuk retrofit sistem penyimpanan baterai.',
-            images: [],
-            tags: ['Hybrid']
-        }
+        // ... (keep usage simple or just use empty array if dbProducts is empty, but better to show something if needed)
     ];
 
-    const products = dbProducts.length > 0 ? dbProducts : placeholderProducts;
+    const products = dbProducts && dbProducts.length > 0 ? dbProducts : [];
+    const baseUrl = process.env.NEXT_PUBLIC_LARAVEL_URL || 'http://localhost:8000';
 
     return (
         <section className="py-24 bg-white">
@@ -93,73 +51,68 @@ export default async function FeaturedProducts() {
 
                 {/* Product Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-                    {products.map((product) => (
-                        <Link
-                            href={`/produk/${product.slug}`}
-                            key={product.id}
-                            className="group bg-white rounded-3xl p-6 border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-500 hover:-translate-y-2 flex flex-col"
-                        >
-                            {/* Image Container */}
-                            <div className="aspect-[4/3] relative mb-6 rounded-2xl overflow-hidden bg-slate-50 group-hover:bg-orange-50/50 transition-colors">
-                                {product.image ? (
+                    {products.map((product: any) => {
+                        let displayImage = '/placeholder.jpg';
+                        if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+                            const firstImg = product.images[0];
+                            if (typeof firstImg === 'string') {
+                                displayImage = firstImg.startsWith('http') ? firstImg : `${baseUrl}/${firstImg}`;
+                            } else if (firstImg.directus_files_id) {
+                                displayImage = `${baseUrl}/assets/${firstImg.directus_files_id.id}`;
+                            }
+                        }
+
+                        return (
+                            <Link
+                                href={`/produk/${product.slug}`}
+                                key={product.id}
+                                className="group bg-white rounded-3xl p-6 border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-500 hover:-translate-y-2 flex flex-col"
+                            >
+                                {/* Image Container */}
+                                <div className="aspect-[4/3] relative mb-6 rounded-2xl overflow-hidden bg-slate-50 group-hover:bg-orange-50/50 transition-colors">
                                     <Image
-                                        src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055'}/assets/${typeof product.image === 'string' ? product.image : product.image.id}?format=webp&quality=80`}
+                                        src={displayImage}
                                         alt={product.name}
                                         fill
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                         className="object-contain p-6 transition-transform duration-700 group-hover:scale-110"
                                     />
-                                ) : product.images && product.images.length > 0 && product.images[0]?.directus_files_id ? (
-                                    <Image
-                                        src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055'}/assets/${product.images[0].directus_files_id.id}?format=webp&quality=80`}
-                                        alt={product.name}
-                                        fill
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                        className="object-contain p-6 transition-transform duration-700 group-hover:scale-110"
-                                    />
-                                ) : (
-                                    <div className="absolute inset-0 flex items-center justify-center flex-col gap-2 text-slate-300 font-medium bg-slate-100">
-                                        <svg className="w-12 h-12 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        <span className="text-xs uppercase tracking-wider">Tanpa Gambar</span>
-                                    </div>
-                                )}
 
-                                {/* Badge (if tags exist) */}
-                                {product.tags && product.tags.length > 0 && (
-                                    <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider text-slate-900 shadow-sm border border-slate-100">
-                                        {typeof product.tags[0] === 'string' ? product.tags[0] : 'New'}
-                                    </span>
-                                )}
-                            </div>
-
-                            {/* Content */}
-                            <div className="space-y-4 flex-1 flex flex-col">
-                                <div>
-                                    <h3 className="text-xl font-bold text-slate-900 group-hover:text-orange-600 transition-colors line-clamp-1">
-                                        {product.name}
-                                    </h3>
-                                    {/* Description (Truncated) */}
-                                    <div
-                                        className="text-slate-500 text-sm line-clamp-2 mt-2 leading-relaxed"
-                                        dangerouslySetInnerHTML={{ __html: product.description || '' }}
-                                    />
+                                    {/* Badge (if tags exist) */}
+                                    {product.tags && product.tags.length > 0 && (
+                                        <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider text-slate-900 shadow-sm border border-slate-100">
+                                            {typeof product.tags[0] === 'string' ? product.tags[0] : 'New'}
+                                        </span>
+                                    )}
                                 </div>
 
-                                <div className="mt-auto pt-4 flex items-center justify-between border-t border-slate-50">
-                                    <span className="text-sm font-bold text-slate-900 group-hover:text-orange-600 transition-colors">
-                                        Lihat Detail
-                                    </span>
-                                    <div className="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center group-hover:bg-orange-600 group-hover:text-white transition-all duration-300">
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                        </svg>
+                                {/* Content */}
+                                <div className="space-y-4 flex-1 flex flex-col">
+                                    <div>
+                                        <h3 className="text-xl font-bold text-slate-900 group-hover:text-orange-600 transition-colors line-clamp-1">
+                                            {product.name}
+                                        </h3>
+                                        {/* Description (Truncated) */}
+                                        <div
+                                            className="text-slate-500 text-sm line-clamp-2 mt-2 leading-relaxed"
+                                            dangerouslySetInnerHTML={{ __html: product.description || '' }}
+                                        />
+                                    </div>
+
+                                    <div className="mt-auto pt-4 flex items-center justify-between border-t border-slate-50">
+                                        <span className="text-sm font-bold text-slate-900 group-hover:text-orange-600 transition-colors">
+                                            Lihat Detail
+                                        </span>
+                                        <div className="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center group-hover:bg-orange-600 group-hover:text-white transition-all duration-300">
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                            </svg>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </Link>
-                    ))}
+                            </Link>
+                        )
+                    })}
                 </div>
 
                 {/* View All Button */}
