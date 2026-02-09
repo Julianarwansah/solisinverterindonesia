@@ -26,10 +26,19 @@ export async function fetchLaravel(path: string, options: RequestInit = {}) {
 
 export const laravel = {
     products: {
-        list: (page = 1, limit = 12, categorySlug?: string) => {
+        list: async (page = 1, limit = 12, categorySlug?: string) => {
             let url = `/products?page=${page}&per_page=${limit}`;
             if (categorySlug) url += `&category=${categorySlug}`;
-            return fetchLaravel(url);
+            const data = await fetchLaravel(url);
+            return {
+                data: data.data,
+                meta: {
+                    current_page: data.current_page,
+                    last_page: data.last_page,
+                    per_page: data.per_page,
+                    total: data.total
+                }
+            };
         },
         show: (slug: string) => fetchLaravel(`/products/${slug}`),
         categories: {
@@ -38,7 +47,18 @@ export const laravel = {
         },
     },
     articles: {
-        list: (page = 1, limit = 12) => fetchLaravel(`/articles?page=${page}&per_page=${limit}`),
+        list: async (page = 1, limit = 12) => {
+            const data = await fetchLaravel(`/articles?page=${page}&per_page=${limit}`);
+            return {
+                data: data.data,
+                meta: {
+                    current_page: data.current_page,
+                    last_page: data.last_page,
+                    per_page: data.per_page,
+                    total: data.total
+                }
+            };
+        },
         show: (slug: string) => fetchLaravel(`/articles/${slug}`),
     }
 };

@@ -12,21 +12,19 @@ const nextConfig = {
             {
                 protocol: 'http',
                 hostname: 'localhost',
-                port: '8055',
-                pathname: '/assets/**',
             },
             {
                 protocol: 'http',
                 hostname: '127.0.0.1',
-                port: '8055',
-                pathname: '/assets/**',
             },
-            // Add your production Directus URL here
-            // {
-            //     protocol: 'https',
-            //     hostname: 'your-directus-instance.com',
-            //     pathname: '/assets/**',
-            // },
+            {
+                protocol: 'https',
+                hostname: 'solisinverterindonesia.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'cms.solisinverterindonesia.com',
+            }
         ],
     },
 };
