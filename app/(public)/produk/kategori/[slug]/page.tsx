@@ -57,7 +57,8 @@ export default async function CategoryPage({
 
     const productsResponse = await getProducts(slug, currentPage, itemsPerPage);
     const products = productsResponse.data || [];
-    const totalProducts = productsResponse.total || productsResponse.meta?.total || 0; // Handle varied pagination response structures
+    const meta = productsResponse.meta || { total: 0 };
+    const totalProducts = meta.total || 0;
 
     const baseUrl = process.env.NEXT_PUBLIC_LARAVEL_URL || 'http://localhost:8000';
 

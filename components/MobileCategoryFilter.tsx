@@ -124,7 +124,7 @@ function CategoryNode({ category, allCategories, currentSlug, openCategories, to
             <div className="relative group">
                 <Link
                     href={`/produk/kategori/${category.slug}`}
-                    className={`flex items-center justify-between px-4 py-3 rounded-2xl border transition-all font-black pr-12 ${isActive
+                    className={`flex-1 flex items-center justify-between px-4 py-3 rounded-2xl border transition-all font-black ${isActive
                         ? 'bg-orange-600 border-orange-600 text-white shadow-lg shadow-orange-500/20'
                         : isParentActive
                             ? 'bg-orange-50/50 border-orange-200 text-orange-600'
@@ -138,14 +138,15 @@ function CategoryNode({ category, allCategories, currentSlug, openCategories, to
                     <button
                         onClick={(e) => {
                             e.preventDefault();
+                            e.stopPropagation();
                             toggleCategory(category.id);
                         }}
-                        className={`absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-xl transition-all ${isExpanded
+                        className={`absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-xl transition-all z-30 ${isExpanded
                             ? (isActive ? 'bg-white/20 text-white rotate-180' : 'bg-orange-500 text-white rotate-180')
                             : (isActive ? 'text-white/60 hover:bg-white/10' : 'text-gray-400 hover:bg-gray-100')
                             }`}
                     >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>

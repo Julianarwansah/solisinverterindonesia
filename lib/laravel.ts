@@ -9,7 +9,7 @@ export async function fetchLaravel(path: string, options: RequestInit = {}) {
             'Content-Type': 'application/json',
             ...options.headers,
         },
-        next: { revalidate: 3600 }, // Cache for 1 hour
+        ...(typeof window === 'undefined' ? { next: { revalidate: 3600 } } : { cache: 'default' })
     });
 
     if (!res.ok) {
