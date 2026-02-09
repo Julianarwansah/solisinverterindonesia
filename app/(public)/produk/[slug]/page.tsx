@@ -4,6 +4,18 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 
+export async function generateStaticParams() {
+    try {
+        const response = await laravel.products.list(1, 100);
+        return response.data.map((product: any) => ({
+            slug: product.slug,
+        }));
+    } catch (error) {
+        console.error('Error generating static params for products:', error);
+        return [];
+    }
+}
+
 type Props = {
     params: Promise<{ slug: string }>;
 };

@@ -7,6 +7,18 @@ import Pagination from '@/components/Pagination';
 import SortDropdown from '@/components/SortDropdown';
 import MobileCategoryFilter from '@/components/MobileCategoryFilter';
 
+export async function generateStaticParams() {
+    try {
+        const categories = await laravel.products.categories.list();
+        return categories.map((cat: any) => ({
+            slug: cat.slug,
+        }));
+    } catch (error) {
+        console.error('Error generating static params for categories:', error);
+        return [];
+    }
+}
+
 async function getCategories() {
     try {
         return await laravel.products.categories.list();
