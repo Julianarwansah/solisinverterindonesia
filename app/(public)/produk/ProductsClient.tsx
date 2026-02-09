@@ -8,7 +8,7 @@ import CategorySidebar from '@/components/CategorySidebar';
 import Pagination from '@/components/Pagination';
 import SortDropdown from '@/components/SortDropdown';
 import MobileCategoryFilter from '@/components/MobileCategoryFilter';
-import { laravel } from '@/lib/laravel';
+import { laravel, getImageUrl } from '@/lib/laravel';
 
 interface Product {
     id: number;
@@ -141,7 +141,7 @@ function ProductsContent({
                                         <Link href={`/produk/${product.slug}`} className="aspect-square relative overflow-hidden bg-gray-50/50 group-hover:bg-white transition-colors duration-700">
                                             {product.images && product.images.length > 0 ? (
                                                 <Image
-                                                    src={product.images[0].startsWith('http') ? product.images[0] : `${process.env.NEXT_PUBLIC_LARAVEL_URL || 'http://localhost:8000'}/${product.images[0]}`}
+                                                    src={getImageUrl(product.images[0])}
                                                     alt={product.name}
                                                     fill
                                                     className="object-contain p-10 transition-transform duration-1000 group-hover:scale-110"

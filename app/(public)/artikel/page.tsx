@@ -1,4 +1,4 @@
-import { laravel } from '@/lib/laravel';
+import { laravel, getImageUrl } from '@/lib/laravel';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Metadata } from 'next';
@@ -22,8 +22,6 @@ export default async function ArticlesPage() {
     const allArticles = await getArticles();
     const featuredArticle = allArticles[0];
     const otherArticles = allArticles.slice(1);
-
-    const baseUrl = process.env.NEXT_PUBLIC_LARAVEL_URL || 'http://localhost:8000';
 
     return (
         <main className="min-h-screen bg-white relative font-sans">
@@ -76,7 +74,7 @@ export default async function ArticlesPage() {
                                         <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
                                             <div className="lg:col-span-7 aspect-[16/10] relative overflow-hidden">
                                                 <Image
-                                                    src={featuredArticle.featured_image ? (featuredArticle.featured_image.startsWith('http') ? featuredArticle.featured_image : `${baseUrl}/${featuredArticle.featured_image}`) : '/placeholder.jpg'}
+                                                    src={getImageUrl(featuredArticle.featured_image)}
                                                     alt={featuredArticle.title}
                                                     fill
                                                     className="object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80 group-hover:opacity-100"
@@ -123,10 +121,10 @@ export default async function ArticlesPage() {
                                             <Link key={article.id} href={`/artikel/${article.slug}`} className="group flex flex-col h-full bg-white rounded-[40px] border border-gray-100/50 p-4 hover:border-orange-200 hover:shadow-2xl hover:shadow-orange-500/5 transition-all duration-500">
                                                 <div className="aspect-[16/10] relative mb-8 rounded-[32px] overflow-hidden">
                                                     <Image
-                                                        src={article.featured_image ? (article.featured_image.startsWith('http') ? article.featured_image : `${baseUrl}/${article.featured_image}`) : '/placeholder.jpg'}
+                                                        src={getImageUrl(article.featured_image)}
                                                         alt={article.title}
                                                         fill
-                                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                                        className="object-cover transition-transform duration-1000 group-hover:scale-110"
                                                     />
                                                 </div>
                                                 <div className="px-6 pb-8 flex flex-col flex-1">

@@ -24,6 +24,21 @@ export async function fetchLaravel(path: string, options: RequestInit = {}) {
     return res.json();
 }
 
+export function getImageUrl(path: string | null | undefined) {
+    if (!path) return '/placeholder.jpg';
+    if (path.startsWith('http')) return path;
+
+    const baseUrl = process.env.NEXT_PUBLIC_LARAVEL_URL || 'http://localhost:8000';
+
+    // Untuk Hostinger: Akses langsung ke folder storage Laravel yang terverifikasi (laravel_app/storage/app/public)
+    if (path.startsWith('products/') || path.startsWith('articles/') || path.startsWith('categories/')) {
+        return `${baseUrl}/laravel_app/storage/app/public/${path}`;
+    }
+
+    // Default: untuk folder images/ statis di root
+    return `${baseUrl}/${path}`;
+}
+
 export const laravel = {
     products: {
         list: async (page = 1, limit = 12, categorySlug?: string) => {

@@ -1,4 +1,4 @@
-import { laravel } from '@/lib/laravel';
+import { laravel, getImageUrl } from '@/lib/laravel';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Metadata, ResolvingMetadata } from 'next';
@@ -38,10 +38,7 @@ export async function generateMetadata(
 
     if (!article) return { title: 'Artikel Tidak Ditemukan' };
 
-    const baseUrl = process.env.NEXT_PUBLIC_LARAVEL_URL || 'http://localhost:8000';
-    const ogImage = article.og_image
-        ? (article.og_image.startsWith('http') ? article.og_image : `${baseUrl}/${article.og_image}`)
-        : undefined;
+    const ogImage = getImageUrl(article.og_image);
 
     return {
         title: `${article.seo_title || article.title} | Solis Inverter Indonesia`,
@@ -60,10 +57,7 @@ export default async function ArticleDetailPage({ params }: Props) {
         notFound();
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_LARAVEL_URL || 'http://localhost:8000';
-    const imageUrl = article.featured_image
-        ? (article.featured_image.startsWith('http') ? article.featured_image : `${baseUrl}/${article.featured_image}`)
-        : null;
+    const imageUrl = getImageUrl(article.featured_image);
 
     return (
         <main className="min-h-screen bg-white pb-20">

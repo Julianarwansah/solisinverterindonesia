@@ -23,7 +23,29 @@ class CategoryResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('slug')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Select::make('parent_id')
+                    ->relationship('parent', 'name')
+                    ->searchable(),
+                Forms\Components\FileUpload::make('thumbnail')
+                    ->image()
+                    ->directory('categories'),
+                Forms\Components\Textarea::make('description')
+                    ->maxLength(65535)
+                    ->columnSpanFull(),
+                Forms\Components\Section::make('SEO')
+                    ->schema([
+                        Forms\Components\TextInput::make('seo_title')
+                            ->maxLength(255),
+                        Forms\Components\Textarea::make('seo_description')
+                            ->maxLength(65535),
+                        Forms\Components\TextInput::make('seo_keywords'),
+                    ])
             ]);
     }
 
@@ -31,7 +53,19 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\ImageColumn::make('thumbnail'),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('slug')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('parent.name')
+                    ->label('Parent Category')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

@@ -1,4 +1,4 @@
-import { laravel } from '@/lib/laravel';
+import { laravel, getImageUrl } from '@/lib/laravel';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -52,15 +52,9 @@ export default async function FeaturedProducts() {
                 {/* Product Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
                     {products.map((product: any) => {
-                        let displayImage = '/placeholder.jpg';
-                        if (product.images && Array.isArray(product.images) && product.images.length > 0) {
-                            const firstImg = product.images[0];
-                            if (typeof firstImg === 'string') {
-                                displayImage = firstImg.startsWith('http') ? firstImg : `${baseUrl}/${firstImg}`;
-                            } else if (firstImg.directus_files_id) {
-                                displayImage = `${baseUrl}/assets/${firstImg.directus_files_id.id}`;
-                            }
-                        }
+                        const displayImage = product.images && product.images.length > 0
+                            ? getImageUrl(product.images[0])
+                            : '/placeholder.jpg';
 
                         return (
                             <Link

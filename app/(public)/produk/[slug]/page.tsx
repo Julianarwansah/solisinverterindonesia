@@ -1,4 +1,4 @@
-import { laravel } from '@/lib/laravel';
+import { laravel, getImageUrl } from '@/lib/laravel';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -58,7 +58,7 @@ export default async function ProductDetail({ params }: Props) {
     // 1. Featured Image (Laravel usually returns array of strings or single string)
     if (product.images && Array.isArray(product.images)) {
         product.images.forEach((img: string) => {
-            const url = img.startsWith('http') ? img : `${baseUrl}/${img}`;
+            const url = getImageUrl(img);
             if (!images.includes(url)) images.push(url);
         });
     }

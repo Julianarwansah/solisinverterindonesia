@@ -1,16 +1,17 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { getImageUrl } from '@/lib/laravel';
 import Image from 'next/image';
 import Link from 'next/link';
 
 interface Category {
-    id: string;
+    id: string | number;
     name: string;
     slug: string;
     description: string;
     image?: string;
-    thumbnail?: string | { id: string };
+    thumbnail?: string;
 }
 
 interface CategorySectionProps {
@@ -104,11 +105,7 @@ export default function CategorySection({ categories }: CategorySectionProps) {
                         className={`lg:col-span-7 relative aspect-[16/10] rounded-[40px] overflow-hidden shadow-2xl group transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
                     >
                         <Image
-                            src={
-                                activeCategory.thumbnail
-                                    ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://127.0.0.1:8055'}/assets/${typeof activeCategory.thumbnail === 'object' ? activeCategory.thumbnail.id : activeCategory.thumbnail}?format=webp&quality=80`
-                                    : (activeCategory.image || "/images/about_main.webp")
-                            }
+                            src={getImageUrl(activeCategory.thumbnail || activeCategory.image)}
                             alt={activeCategory.name}
                             fill
                             sizes="(max-width: 1024px) 100vw, 60vw"
